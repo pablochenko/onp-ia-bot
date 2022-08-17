@@ -1,52 +1,33 @@
 require ('dotenv').config();
-
 const express = require('express')
+const {WebhookClient} = require('dialogflow-fulfillment')
+
 const app = express()
+app.use(express.json())
 
-const {WebhookClient} = require('dialogflow-fulfillment');
 
-
-app.get('/', function (req, res) {
-  res.send('Hello WorldxsX')
+app.get('/', (req, res) => {
+    res.send("Server Is Working......")
+})
+/**
+* on this route dialogflow send the webhook request
+* For the dialogflow we need POST Route.
+* */
+app.post('/webhook', (req, res) => {
+    // get agent from request
+    let agent = new WebhookClient({request: req, response: res})
+    // create intentMap for handle intent
+    let intentMap = new Map();
+    // add intent map 2nd parameter pass function
+    intentMap.set('Identificacion',handleWebHookIntent)
+    // now agent is handle request and pass intent map
+    agent.handleRequest(intentMap)
 })
 
-app.post('/webhook',express.json, function (req, res) {
- // res.send('Hello Worldx')
- const agent = new WebhookClient({ request:req, response:res });
-console.log('Dialogflow Request headers: ' + JSON.stringify(req.headers));
-console.log('Dialogflow Request body: ' + JSON.stringify(req.body));
 
-function welcomex(agent) {
-  agent.add(`Welcome to my agent!`);
+function handleWebHookIntent(agent){
+    agent.add("Hello I am Webhook demo How are you...")
 }
 
-function fallback(agent) {
-  agent.add(`I didn't understand`);
-  agent.add(`I'm sorry, can you try again?`);
-}
-
-
-function validDatosDni(agent)
-{
-
-  agent.add(`URL descargalo`);
-
- 
-}
-
-// Run the proper function handler based on the matched Dialogflow intent name
-let intentMap = new Map();
-intentMap.set('Default Welcome Intent', welcomex);
-intentMap.set('Default Fallback Intent', fallback);
-intentMap.set('Identificacion', validDatosDni);
-// intentMap.set('your intent name here', googleAssistantHandler);
-agent.handleRequest(intentMap);
-
-})
-
-app.listen(process.env.PORT)
-//actions-on-google
-//https://us-central1-newagent-lwhy.cloudfunctions.net/dialogflowFirebaseFulfillment
-
-
+app.listen(process.env.port)
 
