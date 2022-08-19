@@ -1,35 +1,74 @@
 require ('dotenv').config();
 const express = require('express')
 const {WebhookClient} = require('dialogflow-fulfillment')
+const request = require("request");
+const exphbs = require("express-handlebars");
+const http = require('https')
 
 const app = express()
 app.use(express.json())
-
+//app.engine("handlebars",exphbs());
+//app.set("view engine","handlebars");
 
 app.get('/', (req, res) => {
-    res.send("Server Is Working 3......")
+   res.send("servidor 3......")
+
 })
-/**
-* on this route dialogflow send the webhook request
-* For the dialogflow we need POST Route.
-* */
+
 
 app.post('/webhook', (req, res) => {
-    // get agent from request
     let agent = new WebhookClient({request: req, response: res})
-    // create intentMap for handle intent
     let intentMap = new Map();
-    // add intent map 2nd parameter pass function
     intentMap.set('Identificacion',handleWebHookIntent)
-    // now agent is handle request and pass intent map
     agent.handleRequest(intentMap)
 })
 
-
+/*
 function handleWebHookIntent(agent){
     agent.add("funcionando desde el webhook")
 }
+*/
+async function handleWebHookIntent(agent){
+    // let result = await p;
+     agent.add("funcionando desde el webhook 19/08")
+  
+    // const answer = agent.parameters.number;
+    // answers.push(answer);
+  
+     const payload = {
+         "telegram": {
+             "text": "hola:",
+             "reply_markup": {
+               "inline_keyboard": [
+                 [
+                   {
+                     "callback_data": "si",
+                     "text": "SI"
+                   }
+                 ],
+                 [
+                   {
+                     "callback_data": "no",
+                     "text": "NO"
+                   }
+                 ]
+               ]
+             }
+           }
+     }
+  
+     agent.add(
+         new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true})
+     );
+  
+  
+  
+ }
+ 
+
+
+
+
 
 
 app.listen(process.env.PORT)
-
