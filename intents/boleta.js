@@ -173,8 +173,7 @@ agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage:
     // const parametros = {'anio': anio, 'per_num_doc': per_num_doc, 'mes': mes };
     // console.log(parametros);
     // console.log(dataBoletaPago);
-    texto = `📄 Puedes descargar tu boleta de pago haciendo clic en el siguiente link: ${dataBoletaPagoDwnd.data.url}
-    🖥 Seleccione una de las siguientes opciones:`;  
+    texto = `📄 Puedes descargar tu boleta de pago haciendo clic en el siguiente link: ${dataBoletaPagoDwnd.data.url}`;  
 
   }else
   {
