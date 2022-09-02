@@ -62,19 +62,30 @@ async function handleIntentBoletaPago(agent) {
         inline_keyboard.push([{"text": cron.desEmision,"callback_data": cron.numEmision}]);
       }
       
-        mensaje+=`
+       /* mensaje+=`
         🏦 Banco : ${cron.desEntRepago}
         📆 Fecha de emisión : ${cron.desEmision}
         📑 Estado de Pago : ${cron.estPago}
         💰 Monto Pago Bruto  : ${cron.montoPagoBruto}
-        💵 Monto Pago Neto : ${cron.montoPagoNeto}
+        💵 Monto Pago Neto : ${cron.montoPagoNeto}*/
 
-       --------------------------------------------------------
-        `;
+        mensaje=`
+        🏦 Banco : ${cron.desEntRepago}         
+        📑 Estado de Pago : ${cron.estPago}
+        💰 Monto Pago Bruto  : ${cron.montoPagoBruto}
+        💵 Monto Pago Neto : ${cron.montoPagoNeto}`;
+agent.add(new Card({
+            title: `📆 Fecha de emisión : ${cron.desEmision}`,
+            text: mensaje,            
+            buttonText: 'Descargar boleta',
+            buttonUrl: cron.numEmision
+          })
+          );
+
       i++;  
     }
     
-    let texto = `${mensaje}
+   /* let texto = `${mensaje}
        Seleccione la fecha de la boleta que desea descargar:`;  
        const payload = {
              "telegram": {
@@ -86,6 +97,10 @@ async function handleIntentBoletaPago(agent) {
                }
              }
        agent.add(new Payload(agent.UNSPECIFIED, payload, {rawPayload: true, sendAsMessage: true}));
+
+
+ */
+
 
        agent.context.set({ name: '2identificacion-valid-followup', lifespan: 2, parameters: parametros });
        //agent.context.set({ name: contexto, lifespan: 4, parameters: parametros });
