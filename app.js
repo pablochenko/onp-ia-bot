@@ -10,16 +10,13 @@ const request = require("request"),
 
 const { createBot } =require ('whatsapp-cloud-api');
 
-const token = 'EAAIaZB8GynWUBADakXfZAVO4VETLClM1lX0t0tH0ybywSUI187sMKTk4NHI0clNul8Sl0XhdJK5zmFnzRbHgMZAGkF96Q7LJHCiHhO5hJgJ5wAaZCgjlIFcWOLwvxgndm53ZBGkpKGHZB43BaJi39LbaFr8gRw5Rg2x9qlvdA8D8o7I0FmTxn8H9ITHR30Sgk8wtFEMkJLUpFoknGIsxU1';
-
-
+const token = process.env.WHATSAPP_TOKEN;
 const from = '103713755779208';
 const to = '51948363889';
-const webhookVerifyToken = 'IaZB8GynWUBADakXfZAVO4Vvxgndm53ZBGkpKGHZBoknGI';
-const bot = createBot(from, token);
+const webhookVerifyToken = process.env.VERIFY_TOKEN;;
+//const bot = createBot(from, token);
 
 //app.listen(process.env.PORT || 3000, () => console.log("webhook is listening"));
-app.listen(3000, () => console.log("webhook is listening"));
 
 
 // (async () => {
@@ -30,7 +27,7 @@ app.listen(3000, () => console.log("webhook is listening"));
 //     // Create a bot that can send messages
 
 //     // Send text message
-//    // const result = await bot.sendText(to, 'Hello world pablo chenko 2022');
+ //const result = await bot.sendText(to, 'Hello world pablo chenko 2022');
 
 //     // Start express server to listen for incoming messages
 //     // NOTE: See below under `Documentation/Tutorial` to learn how
@@ -74,7 +71,7 @@ app.post("/webhook", (req, res) => {
   let body = req.body;
 
   // Check the Incoming webhook message
-  console.log(JSON.stringify(req.body, null, 2));
+  //console.log(JSON.stringify(req.body, null, 2));
 
   //const msjWsp=JSON.stringify(req.body, null, 2);
 
@@ -149,7 +146,6 @@ app.get("/webhook", (req, res) => {
    * UPDATE YOUR VERIFY TOKEN
    *This will be the Verify Token value when you set up webhook
   **/
-  const verify_token = 'IaZB8GynWUBADakXfZAVO4Vvxgndm53ZBGkpKGHZBoknGI';
 
   // Parse params from the webhook verification request
   let mode = req.query["hub.mode"];
@@ -159,7 +155,7 @@ app.get("/webhook", (req, res) => {
   // Check if a token and mode were sent
   if (mode && token) {
     // Check the mode and token sent are correct
-    if (mode === "subscribe" && token === verify_token) {
+    if (mode === "subscribe" && token === webhookVerifyToken) {
       // Respond with 200 OK and challenge token from the request
       console.log("WEBHOOK_VERIFIED");
       res.status(200).send(challenge);
@@ -169,3 +165,5 @@ app.get("/webhook", (req, res) => {
     }
   }
 });
+
+app.listen(process.env.PORT)
