@@ -42,14 +42,16 @@ async function handleIntentBoletaPago(agent) {
 
 
     let mensaje = '💵 Boletas de Pagos:\n';
-    let inline_keyboard=[];
+   // let inline_keyboard=[];
 
 
 
-     let i=0;
-      let j=0;
-      let aux = [];
+   //  let i=0;
+   //   let j=0;
+   //   let aux = [];
      for (const cron of dataRes) {
+
+      /*
       if(i%2 == 0 && j==0){
         aux.push({"text": cron.desEmision,"callback_data": cron.numEmision});
         j=1;
@@ -60,7 +62,7 @@ async function handleIntentBoletaPago(agent) {
         j=0;
       }else if(j==0){
         inline_keyboard.push([{"text": cron.desEmision,"callback_data": cron.numEmision}]);
-      }
+      }*/
       
        /* mensaje+=`
         🏦 Banco : ${cron.desEntRepago}
