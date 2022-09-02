@@ -17,6 +17,7 @@ function welcome(agent) {
       [{"text": "Solicitar o recuperar mi Clave virtual", "callback_data": "clave_virtual"}],
       [{"text": "Consultar el cronograma de pagos","callback_data": "cronograma"}],
       [{"text": "Conocer las Sedes y los horarios de atención","callback_data": "sedes_horarios"}],
+      [{"text": "Soy un servidor de ONP","callback_data": "usuario_interno"}],              
       [{"text": "Finalizar conversación","callback_data": "finalizar"}]
     ];
 
