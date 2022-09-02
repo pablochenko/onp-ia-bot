@@ -84,7 +84,6 @@ agent.add(new Card({
           })
           );
 
-      i++;  
     }
     
    /* let texto = `${mensaje}
