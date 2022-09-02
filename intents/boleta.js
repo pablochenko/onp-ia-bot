@@ -104,7 +104,7 @@ agent.add(new Card({
  */
 
 
-       agent.context.set({ name: '2identificacion-valid-followup', lifespan: 2, parameters: parametros });
+       agent.context.set({ name: '2identificacion-valid-followup', lifespan: 1, parameters: parametros });
        //agent.context.set({ name: contexto, lifespan: 4, parameters: parametros });
 
 
@@ -174,7 +174,7 @@ agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage:
     // const parametros = {'anio': anio, 'per_num_doc': per_num_doc, 'mes': mes };
     // console.log(parametros);
     // console.log(dataBoletaPago);
-    texto = `Descargue su boleta de pago 📄:  ${dataBoletaPagoDwnd.data.url}
+    texto = `📄 Puedes descargar tu boleta de pago haciendo clic en el siguiente link: ${dataBoletaPagoDwnd.data.url}
     🖥 Seleccione una de las siguientes opciones:`;  
 
   }else
