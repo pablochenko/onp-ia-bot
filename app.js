@@ -142,6 +142,7 @@ app.post("/webhook", (req, res) => {
 
 
 app.get("/webhook", (req, res) => {
+  console.log('web-1');
   /**
    * UPDATE YOUR VERIFY TOKEN
    *This will be the Verify Token value when you set up webhook
