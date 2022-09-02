@@ -37,19 +37,31 @@ async function getDemo() {
 }
 
 //getDemo();
+function sleep(time){
+  return new Promise(resolve => setTimeout(resolve.time));
+}
 
 function resolveAfter2Seconds(x) {
+  
   return new Promise(resolve => {
     setTimeout(() => {
       resolve(x);
-    }, 4000);
+    }, 200);
   });
+
+
 }
 
 async function add1(agent) {
+  console.log('demo esperar')
+
   const a = await resolveAfter2Seconds('demo');
   console.log(a)
-  agent.add('webhook- time out');
+agent.add('webhook- time out');
+agent.setFollowupEvent('identificacion');
+
+
+
   //return x + a + b;
 }
 
@@ -102,14 +114,16 @@ Selecciona el servicio que desees consultar:`;
                 [{"text": "Consultar información de mi cuenta","callback_data": "identificacion"}],
                 [{"text": "Solicitar o recuperar mi Clave virtual", "callback_data": "clave_virtual"}],
                 [{"text": "Consultar el cronograma de pagos","callback_data": "cronograma"}],
-                [{"text": "Conocer las Sedes y los horarios de atención","callback_data": "sedes_horarios"}]
+                [{"text": "Conocer las Sedes y los horarios de atención","callback_data": "sedes_horarios"}],
+                [{"text": "Soy un servidor de ONP","callback_data": "usuario_interno"}],               
+
               ]
             },"parse_mode": "HTML"
           }
         }
   agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));
 }
-
+/*
 app.post("/webhookx", (request, response) => {
 
   console.log('webhookx')
@@ -149,6 +163,7 @@ app.post("/webhookx", (request, response) => {
   }
   response.json(jsonResponse);
 });
+*/
 
 app.post('/webhook', (req, res) => {
   let agent = new WebhookClient({ request: req, response: res })
