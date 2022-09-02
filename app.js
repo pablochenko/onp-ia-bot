@@ -56,6 +56,9 @@ const webhookVerifyToken = process.env.VERIFY_TOKEN;;
 // })();
 
 app.post("/webhook", (req, res) => {
+
+  const bot = createBot(from, token);
+
   // Parse the request body from the POST
 /*
   bot.on('message', async (msg) => {
