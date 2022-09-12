@@ -91,8 +91,6 @@ async function handleIntentPResolucionDetalle(agent) {
     agent.context.set({ name: 'set_menu_asegurado', lifespan: 1, parameters: identificacion });  
     agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });  
   }
-
-
 }
 
 function payload_opciones(datos){
