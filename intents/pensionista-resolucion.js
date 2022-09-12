@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 const { Card, Suggestion, Payload } = require('dialogflow-fulfillment');
-
 const { getResoluciones, getResolucionesDetalle, getResolucionDonwload } = require('../controllers/pensionista/servicios');
 
 async function handleIntentPResolucion(agent) {
@@ -11,59 +10,46 @@ async function handleIntentPResolucion(agent) {
   const token = identificacion.token;
   const dataResoluciones = await getResoluciones(token);
 
-  if(dataResoluciones.codigo!='0000')
-  {
+  if(dataResoluciones.codigo!='0000'){//mensaje de error
     console.log('error')
-
     const payload = {
       "telegram": {
         "text": dataResoluciones.mensaje,
         "reply_markup": {
           "inline_keyboard": [
-            [{ "text": "Regresar al menú principal", "callback_data": "menu" }],
+            [{ "text": "Regresar al menú anterior", "callback_data": "menu_asegurado" }],
             [{ "text": "Finalizar conversación", "callback_data": "finalizar" }]
           ]
         }, "parse_mode": "HTML"
       }
     };
     agent.add(new Payload(agent.UNSPECIFIED, payload, { rawPayload: true, sendAsMessage: true }));
-
   }
-
   console.log(dataResoluciones)
 
   if (dataResoluciones.status && dataResoluciones.codigo == '0000') {
     const expedientes = dataResoluciones.data;
-    let mensaje = '🧾 Expedientes:\n';
+    let texto = '<b>¡Consulta de resoluciones!</b>\nEstimado(a) asegurado(a), selecciona el expediente 🗂️ al que deseas acceder:';
     let inline_keyboard = [];
     for (const cron of expedientes) {
-      inline_keyboard.push([{ "text": cron.NumeroExpediente, "callback_data": cron.NumeroExpediente }]);
-      mensaje += `
-          ⚖️ Codigo Ley: ${cron.CodigoLey} 
-          #️⃣ Número de Expediente: ${cron.NumeroExpediente}
-          --------------------------------------------------------
-          `;
+      inline_keyboard.push([{ "text": `⚖️ Ley: ${cron.CodigoLey} - Expediente: ${cron.NumeroExpediente}`, "callback_data": cron.NumeroExpediente }]);
     }
     const parametros = { 'expedientes': expedientes, 
-                          'identificacion': identificacion };
-    let texto = `${mensaje}
-       Seleccione/escriba el expediente:`;
+                          'identificacion': identificacion };    
     const payload = {
       "telegram": {
         "text": texto,
         "reply_markup": {
-          "inline_keyboard":
-            inline_keyboard
-        }
+          "inline_keyboard": inline_keyboard
+        }, "parse_mode": "HTML"
       }
     };
     agent.add(new Payload(agent.UNSPECIFIED, payload, { rawPayload: true, sendAsMessage: true }));
     agent.context.set({ name: 'set_resolucion_det', lifespan: 1, parameters: parametros });  
-    agent.context.set({ name: 'set_menu_asegurado', lifespan: 1, parameters: identificacion });  
-    agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });  
-  }
+  }  
+  agent.context.set({ name: 'set_menu_asegurado', lifespan: 1, parameters: identificacion });  
+  agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });  
 }
-
 
 async function handleIntentPResolucionDetalle(agent) {
   const data = agent.context.get("set_resolucion_det").parameters;
@@ -102,7 +88,7 @@ async function handleIntentPResolucionDetalle(agent) {
       }
     };
     agent.add(new Payload(agent.UNSPECIFIED, payload, { rawPayload: true, sendAsMessage: true }));    
-    agent.context.set({ name: 'set_resolucion_dow', lifespan: 2, parameters: parametros });  
+    agent.context.set({ name: 'set_resolucion_det', lifespan: 1, parameters: parametros });  
     agent.context.set({ name: 'set_menu_asegurado', lifespan: 1, parameters: identificacion });  
     agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });  
   }
@@ -116,7 +102,7 @@ function payload_opciones(datos){
   let num = 1;
   for (const x of datos) { 
     detalle.push({"text": `Res. ${x.NumeroDocumento}`,"callback_data": num++}); 
-    if(detalle.length == 4){
+    if(detalle.length == 2){
       opciones.push(detalle);
       detalle = [];
     }       
@@ -134,10 +120,14 @@ async function handleIntentPResolucionDownload(agent) {
   const resoluciones = data.resoluciones;
   const token = identificacion.token;
   const nuRes = agent.parameters.codnumres;
-
   const dataRes = resoluciones[nuRes - 1];
-
   const dataResDownload = await getResolucionDonwload(token, dataRes.IdDetalle);
+
+
+  const parametros = { 'expedientes': expedientes, 
+                          'resoluciones': resoluciones,
+                          'identificacion': identificacion };
+
   console.log('data');
   console.log(data);
 
@@ -152,17 +142,14 @@ async function handleIntentPResolucionDownload(agent) {
   if (dataResDownload.status && dataResDownload.codigo == '0000') {
 
     const server_url = process.env.SERVER_URL;
-    let texto = `Descargar Resolución : 
-    ${server_url}/download-resolucion-pensionista/${dataResDownload.data}`;
+    let texto = `¡Tu Resolución ha sido generada! 
+    👉 ${server_url}/download-resolucion-pensionista/${dataResDownload.data}`;
+    let opciones = payload_opciones(resoluciones);
     const payload = {
       "telegram": {
         "text": texto,
         "reply_markup": {
-          "inline_keyboard": [
-            [{"text": "Regresar al menú anterior","callback_data": "menu_asegurado"}],
-            [{ "text": "Regresar al menú principal", "callback_data": "menu" }],
-            [{ "text": "Finalizar conversación", "callback_data": "finalizar" }]
-          ]
+          "inline_keyboard": opciones
         }, "parse_mode": "HTML"
       }
     };
@@ -170,6 +157,7 @@ async function handleIntentPResolucionDownload(agent) {
    // agent.context.set({ name: 'set_boleta_descargar', lifespan: 1, parameters: expedientes });  
     //agent.context.set({ name: 'set_resolucion_det', lifespan: 1, parameters: expedientes });  
 
+    agent.context.set({ name: 'set_resolucion_dow', lifespan: 1, parameters: parametros });  
     agent.context.set({ name: 'set_menu_asegurado', lifespan: 1, parameters: identificacion });  
     agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });   
 
