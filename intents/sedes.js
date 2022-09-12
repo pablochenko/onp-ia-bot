@@ -50,15 +50,14 @@ function payload_opciones(){
 
 
 function sedes_horarios_info(agent) {         
-    const sede_region=agent.parameters.sede_region.original;  
-    const sede_region_text=agent.parameters.sede_region;  
+    const sede_region=agent.parameters.sede_region;  
     //const contextIn = agent.getContext('identificacion-followup');
     //const per_nombre = contextIn.parameters.per_nombre;
     agent.add(`¡Conoce nuestras sedes en ${sede_region_text}!`); 
     for (const sede of v_sedes) {   
       if((sede_region.toUpperCase() == (sede.region).toUpperCase()) || 
-         (sede_region.toUpperCase() == 'LIMA_METROP' && (sede.provincia).toUpperCase()== 'LIMA') ||
-         (sede_region.toUpperCase() == 'LIMA_PROV' && (sede.region).toUpperCase()== 'LIMA'&& (sede.provincia).toUpperCase()!= 'LIMA') || 
+         (sede_region.toUpperCase() == 'LIMA METROPOLITANA' && (sede.provincia).toUpperCase()== 'LIMA') ||
+         (sede_region.toUpperCase() == 'LIMA PROVINCIA' && (sede.region).toUpperCase()== 'LIMA'&& (sede.provincia).toUpperCase()!= 'LIMA') || 
          (sede_region.toUpperCase() == 'CALLAO' && (sede.region).toUpperCase()== 'CALLAO')){
         let direccion = (sede.direccion == 'S/D')? (sede.region+' - '+sede.provincia+' - '+sede.distrito) : (sede.direccion+'\n'+sede.region+' - '+sede.provincia+' - '+sede.distrito);
         let horario = (sede.horario == 'S/D')? 'Sin datos': ('\nHorario de atención: '+sede.horario);
