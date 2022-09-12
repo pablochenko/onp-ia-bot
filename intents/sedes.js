@@ -53,7 +53,8 @@ function sedes_horarios_info(agent) {
     const sede_region=agent.parameters.sede_region;  
     //const contextIn = agent.getContext('identificacion-followup');
     //const per_nombre = contextIn.parameters.per_nombre;
-    agent.add(`¡Conoce nuestras sedes en ${sede_region_text}!`); 
+    let respuesta = [];
+    //agent.add(`¡Conoce nuestras sedes en ${sede_region_text}!`); 
     for (const sede of v_sedes) {   
       if((sede_region.toUpperCase() == (sede.region).toUpperCase()) || 
          (sede_region.toUpperCase() == 'LIMA METROPOLITANA' && (sede.provincia).toUpperCase()== 'LIMA') ||
@@ -63,14 +64,21 @@ function sedes_horarios_info(agent) {
         let horario = (sede.horario == 'S/D')? 'Sin datos': ('\nHorario de atención: '+sede.horario);
         let mapa = (sede.maps == 'S/D')? 'Sin datos': sede.maps;
         let imagen = (sede.imagen == 'S/D')? 'Sin datos': sede.imagen;
-        agent.add(new Card({
+        respuesta.push(new Card({
+          title: sede.tipo + ' - '+ sede.descripcion,
+          text: direccion+horario,
+          imageUrl: imagen,
+          buttonText: 'Ver en Maps',
+          buttonUrl: mapa
+        }));
+        /*agent.add(new Card({
             title: sede.tipo + ' - '+ sede.descripcion,
             text: direccion+horario,
             imageUrl: imagen,
             buttonText: 'Ver en Maps',
             buttonUrl: mapa
           })
-        );
+        );*/
       }      
     }     
     const payload = {"telegram": {"text": "<b>¡Conoce nuestras sedes y horarios de atención a nivel nacional!</b>Selecciona la región que deseas consultar:",
@@ -95,8 +103,8 @@ function sedes_horarios_info(agent) {
                         },"parse_mode": "HTML"
                       } }; 
     //agent.add(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));  
-    agent.add([
-      new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true})]);  
+    respuesta.push(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));  
+    agent.add(respuesta);
   }
 
 
