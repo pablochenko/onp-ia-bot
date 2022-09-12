@@ -17,6 +17,9 @@ function sedes_horarios(agent) {
       }
     }
   agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));
+  
+  agent.context.set({ name: 'set_menu', lifespan: 1, parameters: {} });  
+  agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {}});   
 }
 
 function payload_opciones(){  
@@ -73,14 +76,16 @@ function sedes_horarios_info(agent) {
         );
       }     
     }    
-    
+    /*
     let opciones = payload_opciones(); 
     const payload = {"telegram": {"text": "<b>¡Conoce nuestras sedes y horarios de atención a nivel nacional!</b>Selecciona la región que deseas consultar:",
                         "reply_markup": {
                           "inline_keyboard": opciones
                         },"parse_mode": "HTML"
                       } }; 
-    agent.add(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));  
+    agent.add(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));  */
+    agent.context.set({ name: 'set_menu', lifespan: 1, parameters: {} });  
+    agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {}});   
   }
 
   module.exports = {
