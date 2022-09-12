@@ -54,7 +54,7 @@ function sedes_horarios_info(agent) {
     //const contextIn = agent.getContext('identificacion-followup');
     //const per_nombre = contextIn.parameters.per_nombre;
     let respuesta = [];
-    //agent.add(`¡Conoce nuestras sedes en ${sede_region_text}!`); 
+    agent.add(`¡Conoce nuestras sedes en ${sede_region}!`); 
     for (const sede of v_sedes) {   
       if((sede_region.toUpperCase() == (sede.region).toUpperCase()) || 
          (sede_region.toUpperCase() == 'LIMA METROPOLITANA' && (sede.provincia).toUpperCase()== 'LIMA') ||
@@ -64,23 +64,23 @@ function sedes_horarios_info(agent) {
         let horario = (sede.horario == 'S/D')? 'Sin datos': ('\nHorario de atención: '+sede.horario);
         let mapa = (sede.maps == 'S/D')? 'Sin datos': sede.maps;
         let imagen = (sede.imagen == 'S/D')? 'Sin datos': sede.imagen;
-        respuesta.push(new Card({
-          title: sede.tipo + ' - '+ sede.descripcion,
-          text: direccion+horario,
-          imageUrl: imagen,
-          buttons:[{'text': 'Ver en Maps','url': mapa}, {'text': 'Green'}, {'text': 'Blue'}]
-          
-        }));
-        /*agent.add(new Card({
+        agent.add(new Card({
             title: sede.tipo + ' - '+ sede.descripcion,
             text: direccion+horario,
             imageUrl: imagen,
             buttonText: 'Ver en Maps',
             buttonUrl: mapa
           })
-        );*/
+        );
       }      
     }     
+    agent.add(new Card({
+        title: ' - ',
+        text: 'Gracias ',
+        buttonText: 'Menú principal',
+        buttonUrl: 'menu'
+      })
+    );
     const payload = {"telegram": {"text": "<b>¡Conoce nuestras sedes y horarios de atención a nivel nacional!</b>Selecciona la región que deseas consultar:",
                         "reply_markup": {
                           "inline_keyboard": [[
@@ -103,8 +103,8 @@ function sedes_horarios_info(agent) {
                         },"parse_mode": "HTML"
                       } }; 
     //agent.add(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));  
-    respuesta.push(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));  
-    agent.add(respuesta);
+    //respuesta.push(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));  
+    //agent.add(respuesta);
   }
 
 
