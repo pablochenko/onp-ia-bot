@@ -61,7 +61,7 @@ function sedes_horarios_info(agent) {
     let list_opc = [];
     //agent.add(`¡Conoce nuestras sedes en ${sede_region}!`); 
     
-    list_opc.push(new Text(`¡Conoce nuestras sedes en ${sede_region}!`)); 
+    //list_opc.push(new Text(`¡Conoce nuestras sedes en ${sede_region}!`)); 
     for (const sede of v_sedes) {   
       if((sede_region.toUpperCase() == (sede.region).toUpperCase()) || 
          (sede_region.toUpperCase() == 'LIMA METROPOLITANA' && (sede.provincia).toUpperCase()== 'LIMA') ||
