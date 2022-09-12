@@ -75,8 +75,8 @@ function sedes_horarios_info(agent) {
       }      
     }     
     agent.add(new Card({
-        title: ' - ',
-        text: 'Gracias ',
+        title: '¡Gracias por usar nuestros canales digitales!',
+        text: 'Selecciona la siguiene opción para retornar al menú principal ',
         buttonText: 'Menú principal',
         buttonUrl: 'menu'
       })
