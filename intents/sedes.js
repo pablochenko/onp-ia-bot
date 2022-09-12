@@ -68,8 +68,8 @@ function sedes_horarios_info(agent) {
           title: sede.tipo + ' - '+ sede.descripcion,
           text: direccion+horario,
           imageUrl: imagen,
-          buttonText: 'Ver en Maps',
-          buttonUrl: mapa
+          buttons:[{'text': 'Ver en Maps','url': mapa}, {'text': 'Green'}, {'text': 'Blue'}]
+          
         }));
         /*agent.add(new Card({
             title: sede.tipo + ' - '+ sede.descripcion,
