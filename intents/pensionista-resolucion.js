@@ -71,8 +71,7 @@ async function handleIntentPResolucionDetalle(agent) {
     console.log(dataPens);
     console.log(resoluciones);
 
-    let mensaje = '🧾Por favor seleccione la Resolución que desea descargar:\n';
-    let inline_keyboard = [];
+    let mensaje = 'Clic sobre la Resolución que deseas descargar:📄';  
   
     const parametros = { 'expedientes': expedientes, 
                           'resoluciones': resoluciones,
@@ -88,7 +87,7 @@ async function handleIntentPResolucionDetalle(agent) {
       }
     };
     agent.add(new Payload(agent.UNSPECIFIED, payload, { rawPayload: true, sendAsMessage: true }));    
-    agent.context.set({ name: 'set_resolucion_det', lifespan: 1, parameters: parametros });  
+    agent.context.set({ name: 'set_resolucion_dow', lifespan: 1, parameters: parametros });  
     agent.context.set({ name: 'set_menu_asegurado', lifespan: 1, parameters: identificacion });  
     agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });  
   }
