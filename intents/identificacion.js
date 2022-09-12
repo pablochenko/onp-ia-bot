@@ -99,6 +99,9 @@ async function handleIntentIdentificacionValid(agent) {
     agent.context.set({ name: 'set_actualizacion', lifespan: 1, parameters: parametros });
     agent.context.set({ name: 'set_ultimo_aporte', lifespan: 1, parameters: parametros });
 
+    agent.context.set({ name: 'set_constancia_afiliacion', lifespan: 1, parameters: parametros });
+    
+
     agent.context.set({ name: 'set_menu', lifespan: 1, parameters: parametros });
     agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: parametros });
 
