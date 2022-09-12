@@ -7,7 +7,11 @@ const apiGetValidPersona = 'https://uat.onp.gob.pe/ClaveVirtualDev/api/Usuario/P
 
 const apiValidDni='https://uat.onp.gob.pe/ClaveVirtualAPIHost/api/Validacion/PostValidarDni';
 
-const apiConsultarUsuarioExiste='https://uat.onp.gob.pe/ClaveVirtualAPIHost/api/Usuario/PostConsultarUsuarioExiste'
+const apiConsultarUsuarioExiste='https://uat.onp.gob.pe/ClaveVirtualAPIHost/api/Usuario/PostConsultarUsuarioExiste';
+
+const apiValidarOlvideClave='https://uat.onp.gob.pe/ClaveVirtualAPIHost/api/Validacion/ValidarDatosOlvideClaveVirtualAsync'
+
+const apiEnviarCorreo='https://uat.onp.gob.pe/ClaveVirtualAPIHost/api/Usuario/PostEnviarLinkClaveAsync';
 
 const publicKey = `-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDsMd37llJw4NLq57498yjhU3Z
@@ -234,6 +238,83 @@ function getTokenLogin() {
       axios.post(apiConsultarUsuarioExiste,parms,config)
         .then(function (res) {
           const data = res.data;
+          if (data.IsSuccess && data.Codigo == '0000') {
+            resolve(handleResponse(true,'0000','ok', data.Result));
+          }else{
+            resolve(handleResponse(false,'0404','Estamos presentando problemas con el servicio 3.0',[]));
+          }
+  
+        })
+        .catch(function (error) {
+          console.log(error);
+          resolve(handleResponse(false,'0404','Estamos presentando problemas con el servicio 3.2',[]));
+        })
+  
+    });
+    result.catch((err) => {
+      resolve(handleResponse(false,'0404','Estamos presentando problemas con el servicio 3.3',[]));
+    });
+    return result;
+  }
+
+  function getValidOlvideClave(idProceso,tipDoc,numDoc,apePat) {
+    const authBasic={
+      username: '20136424867',
+      password: 'E9CD45C5-32F3-4B0D-B119-EF25CFDC6ADB-BECD030E-9B85-40F3-BB16-7A93DD852C7F'
+    }
+    const config = { auth: authBasic};
+  
+    const parms = { 
+      tipoDocumentoId: parseInt(tipDoc), 
+      numeroDocumento: numDoc, 
+      tipoProcesoId: 2, 
+      apellidoPaternoMaterno: apePat, 
+      IdProceso: idProceso
+     };
+    console.log(parms);
+
+    const result = new Promise(function (resolve, reject) {
+      axios.post(apiValidarOlvideClave,parms,config)
+        .then(function (res) {
+          const data = res.data;
+          console.log(data);
+          if (data.IsSuccess && data.Codigo == '0000') {
+            resolve(handleResponse(true,'0000','ok', data.Result));
+          }else{
+            resolve(handleResponse(false,'0404','Estamos presentando problemas con el servicio 3.0',[]));
+          }
+  
+        })
+        .catch(function (error) {
+          console.log(error);
+          resolve(handleResponse(false,'0404','Estamos presentando problemas con el servicio 3.2',[]));
+        })
+  
+    });
+    result.catch((err) => {
+      resolve(handleResponse(false,'0404','Estamos presentando problemas con el servicio 3.3',[]));
+    });
+    return result;
+  }
+
+  
+
+  function getEnviarCorreo(idProceso) {
+    const authBasic={
+      username: '20136424867',
+      password: 'E9CD45C5-32F3-4B0D-B119-EF25CFDC6ADB-BECD030E-9B85-40F3-BB16-7A93DD852C7F'
+    }
+    const config = { auth: authBasic};
+
+    const parms = { 
+      ProcesoId: parseInt(idProceso), 
+    };
+    console.log(parms);
+
+    const result = new Promise(function (resolve, reject) {
+      axios.post(apiEnviarCorreo,parms,config)
+        .then(function (res) {
+          const data = res.data;
           console.log(data);
           if (data.IsSuccess && data.Codigo == '0000') {
             resolve(handleResponse(true,'0000','ok', data.Result));
@@ -260,5 +341,7 @@ function getTokenLogin() {
     validUserClaveVirtual,
     getValidDni,
     getConsultarUserExiste,
-    getTokenLogin
+    getTokenLogin,
+    getValidOlvideClave,
+    getEnviarCorreo
 }

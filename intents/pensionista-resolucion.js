@@ -2,209 +2,181 @@ require('dotenv').config();
 
 const { Card, Suggestion, Payload } = require('dialogflow-fulfillment');
 
-const {getResoluciones,getResolucionesDetalle,getResolucionDonwload} = require('../controllers/pensionista/servicios');
+const { getResoluciones, getResolucionesDetalle, getResolucionDonwload } = require('../controllers/pensionista/servicios');
 
 async function handleIntentPResolucion(agent) {
-    
-    console.log('resol webhook 121111');
-    console.log(agent.context.get("2identificacion-valid-followup"));
-    const token = agent.context.get("2identificacion-valid-followup").parameters.token;
-    //2identificacion-valid-followup-2
+  console.log('handleIntentPResolucion')
 
+  const identificacion = agent.context.get("set_resolucion").parameters;
+  const token = identificacion.token;
+  const dataResoluciones = await getResoluciones(token);
 
-    const dataResoluciones = await getResoluciones(token);
-    console.log(dataResoluciones);
-if(dataResoluciones.status && dataResoluciones.codigo=='0000')
-{
+  if(dataResoluciones.codigo!='0000')
+  {
+    console.log('error')
 
-    const dataRes=dataResoluciones.data;
-      let mensaje = '🧾 Resoluciones:\n'; 
-      let inline_keyboard=[];
+    const payload = {
+      "telegram": {
+        "text": dataResoluciones.mensaje,
+        "reply_markup": {
+          "inline_keyboard": [
+            [{ "text": "Regresar al menú principal", "callback_data": "menu" }],
+            [{ "text": "Finalizar conversación", "callback_data": "finalizar" }]
+          ]
+        }, "parse_mode": "HTML"
+      }
+    };
+    agent.add(new Payload(agent.UNSPECIFIED, payload, { rawPayload: true, sendAsMessage: true }));
 
-       for (const cron of dataRes) { 
-      
-        inline_keyboard.push([{"text": cron.NumeroExpediente,"callback_data": cron.NumeroExpediente}]);
-          mensaje+=`
+  }
+
+  console.log(dataResoluciones)
+
+  if (dataResoluciones.status && dataResoluciones.codigo == '0000') {
+    const expedientes = dataResoluciones.data;
+    let mensaje = '🧾 Expedientes:\n';
+    let inline_keyboard = [];
+    for (const cron of expedientes) {
+      inline_keyboard.push([{ "text": cron.NumeroExpediente, "callback_data": cron.NumeroExpediente }]);
+      mensaje += `
           ⚖️ Codigo Ley: ${cron.CodigoLey} 
           #️⃣ Número de Expediente: ${cron.NumeroExpediente}
           --------------------------------------------------------
           `;
-      }    
-      console.log(inline_keyboard);
-       const parametros = {'resolucion': dataRes,'token': token};
-       //2.2 Resolucion Pensionista
-       const contexto = '22resolucionpensionista-followup';
-
-      
-       let texto = `${mensaje}
-       Seleccione/escriba una resolución:`;  
-       const payload = {
-             "telegram": {
-              "text": texto,
-              "reply_markup": {
-                "inline_keyboard": 
-                  inline_keyboard          
-              }
-               }
-             }
-       agent.add(new Payload(agent.UNSPECIFIED, payload, {rawPayload: true, sendAsMessage: true}));
-       agent.context.set({ name: contexto, lifespan: 2, parameters: parametros });
-      
-
-}
-    //const servicios = agent.parameters.servicios;
-    ///const anio = agent.parameters.anio;
-    ///const mes = agent.parameters.mes;
-  ///  let per_num_doc = agent.context.get("2identificacion-valid-followup").parameters.per_num_doc;
-  //  const dataBoletaPago = await getBoletaPago(per_num_doc,anio,mes);
-  
-    //let text = 'Seleccione';
-    //const contexto = 'Identificacion-followup';
-    // const parametros = {'anio': anio, 'per_num_doc': per_num_doc, 'mes': mes };
-    // console.log(parametros);
-
-    //agent.add(`Descargue su boleta de pago :  ${dataBoletaPago.data.url}`);
-
-/*
-    let texto = `
-    Selecciona una de las siguientes opciones:`;  
+    }
+    const parametros = { 'expedientes': expedientes, 
+                          'identificacion': identificacion };
+    let texto = `${mensaje}
+       Seleccione/escriba el expediente:`;
     const payload = {
-          "telegram": {
-              "text": texto,
-              "reply_markup": {
-                "inline_keyboard": [
-                  [{"text": "Consultar Boleta de Pago", "callback_data": "boleta"}],
-                  [{ "text": "Obtener Resolucion", "callback_data": "resolucion" }],
-                  [{"text": "Consultar Boleta de Pago", "callback_data": "boleta"}],
-                  [{ "text": "Otras consultas", "callback_data": "otras_consultas" }],                  
-                  [{ "text": "Regresar al menú principal", "callback_data": "menu" }],
-                  [{ "text": "Finalizar conversación", "callback_data": "finalizar" }]
-                ]
-              }
-            }
-          }
-    agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true})); 
+      "telegram": {
+        "text": texto,
+        "reply_markup": {
+          "inline_keyboard":
+            inline_keyboard
+        }
+      }
+    };
+    agent.add(new Payload(agent.UNSPECIFIED, payload, { rawPayload: true, sendAsMessage: true }));
+    agent.context.set({ name: 'set_resolucion_det', lifespan: 1, parameters: parametros });  
+    agent.context.set({ name: 'set_menu_asegurado', lifespan: 1, parameters: identificacion });  
+    agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });  
+  }
+}
 
-*/
+
+async function handleIntentPResolucionDetalle(agent) {
+  const data = agent.context.get("set_resolucion_det").parameters;
+  const identificacion = data.identificacion;
+  const expedientes = data.expedientes;
+
+  const token = identificacion.token;
+  const nuRes = agent.parameters.num_resolucion;
+
+  const filterDataRes = expedientes.filter(x => x.NumeroExpediente == nuRes);//VALIDAR SI NO COICIDE DATOS
+
+  const dataRes = filterDataRes[0];
+  const dataResDetalle = await getResolucionesDetalle(token, dataRes.ExisteDocumentos, dataRes.CodigoLey, dataRes.NumeroExpediente, dataRes.IdExpediente);
+
+  if (dataResDetalle.status && dataResDetalle.codigo == '0000') {
+    console.log('ok-dataResDetalle');
+    const dataPens = dataResDetalle.data.DatosCabecera;
+    const resoluciones = dataResDetalle.data.DatosDetalle;
+    console.log(dataPens);
+    console.log(resoluciones);
+
+    let mensaje = '🧾Por favor seleccione la Resolución que desea descargar:\n';
+    let inline_keyboard = [];
   
+    const parametros = { 'expedientes': expedientes, 
+                          'resoluciones': resoluciones,
+                          'identificacion': identificacion };
+    let texto = mensaje;
+    let opciones = payload_opciones(resoluciones);
+    const payload = {
+      "telegram": {
+        "text": texto,
+        "reply_markup": {
+          "inline_keyboard":opciones
+        }
+      }
+    };
+    agent.add(new Payload(agent.UNSPECIFIED, payload, { rawPayload: true, sendAsMessage: true }));    
+    agent.context.set({ name: 'set_resolucion_dow', lifespan: 2, parameters: parametros });  
+    agent.context.set({ name: 'set_menu_asegurado', lifespan: 1, parameters: identificacion });  
+    agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });  
   }
 
-  
-async function handleIntentPResolucionDetalle(agent) {
-    
-    console.log('handleIntentPResolucionDetalle');
-    console.log(agent.context.get("22resolucionpensionista-followup"));
-    const data = agent.context.get("22resolucionpensionista-followup").parameters;
 
-    const token=data.token;
-    const resolucion=data.resolucion;
-
-    const nuRes = agent.parameters.num_resolucion;
-
-    const filterDataRes = resolucion.filter(x => x.NumeroExpediente==nuRes);//VALIDAR SI NO COICIDE DATOS
-
-    const dataRes=filterDataRes[0];
-    console.log(dataRes);
-    console.log(nuRes);
-    // IdExpediente: '12567845',
-    // CodigoLey: '19990',
-    // NumeroExpediente: '00300040605',
-    // ExisteDocumentos: '1'
-    const dataResDetalle = await getResolucionesDetalle(token,dataRes.ExisteDocumentos,dataRes.CodigoLey,dataRes.NumeroExpediente,dataRes.IdExpediente);
-
-    console.log(dataResDetalle);
-
-    if(dataResDetalle.status && dataResDetalle.codigo=='0000')
-{
-    console.log('ok-dataResDetalle');
-    const dataPens=dataResDetalle.data.DatosCabecera;
-    const dataRes=dataResDetalle.data.DatosDetalle;
-    console.log(dataPens);
-    console.log(dataRes);
-
-    let mensaje = '🧾Por favor escriba el número de Resolución que desea descargar:\n'; 
-    let inline_keyboard=[];
-
-    let num=1;
-
-     for (const cron of dataRes) { 
-    
-      //inline_keyboard.push([{"text": cron.NumeroExpediente,"callback_data": cron.NumeroExpediente}]);
-        mensaje+=`
-        #️⃣ ${num++}
-        ⚖️ Tipo Documento: ${cron.TipoDocumento} 
-        🗓️ Fecha Creación NSP: ${cron.FechaCreacionNSP}
-        📄 Número Documento: ${cron.NumeroDocumento}
-        📃 Descripción Documento: ${cron.DescripcionDocumento}
-        ✅ Resultado Documento: ${cron.ResultadoDocumento}
-        --------------------------------------------------------
-        `;
-    }    
-    //console.log(inline_keyboard);
-    const parametros = {'resolucionDet': dataRes,'token': token};
-     //2.2 Resolucion Pensionista
-    const contexto = '221resolucionpensionistadetalle-followup';
-
-    
-     let texto = mensaje;  
-     const payload = {
-           "telegram": {
-            "text": texto,
-            "reply_markup": {
-              "inline_keyboard": 
-                inline_keyboard          
-            }
-             }
-           }
-     agent.add(new Payload(agent.UNSPECIFIED, payload, {rawPayload: true, sendAsMessage: true}));
-     agent.context.set({ name: contexto, lifespan: 2, parameters: parametros });
 }
 
- 
+function payload_opciones(datos){
+  let opciones = [];
+  let detalle = [];
+  let num = 1;
+  for (const x of datos) { 
+    detalle.push({"text": `Res. ${x.NumeroDocumento}`,"callback_data": num++}); 
+    if(detalle.length == 4){
+      opciones.push(detalle);
+      detalle = [];
+    }       
+  } 
+  if(detalle.length >0) opciones.push(detalle);  
+  opciones.push([{"text": "Regresar al menú anterior","callback_data": "menu_asegurado"}]);
+  opciones.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
+  return opciones;
 }
-
 
 async function handleIntentPResolucionDownload(agent) {
-    
-    console.log('handleIntentPResolucionDownload');
-    //console.log(agent.context.get("22resolucionpensionista-followup"));
-    const data = agent.context.get("221resolucionpensionistadetalle-followup").parameters;
+  const data = agent.context.get("set_resolucion_dow").parameters;
+  const identificacion = data.identificacion;
+  const expedientes = data.expedientes;
+  const resoluciones = data.resoluciones;
+  const token = identificacion.token;
+  const nuRes = agent.parameters.codnumres;
 
-    const token=data.token;
-    const resolucion=data.resolucionDet;
+  const dataRes = resoluciones[nuRes - 1];
 
-    const nuRes = agent.parameters.codnumres;
+  const dataResDownload = await getResolucionDonwload(token, dataRes.IdDetalle);
+  console.log('data');
+  console.log(data);
 
-    const dataRes=resolucion[nuRes-1];
+  console.log('dataRes');
+  console.log(dataRes);
 
-   // console.log(resolucion); 
-    console.log(dataRes); 
-    console.log(nuRes); 
+  console.log('resoluciones');
+  console.log(resoluciones);
 
-    const dataResDownload = await getResolucionDonwload(token,dataRes.IdDetalle);
+  console.log(dataResDownload);
 
-    console.log(dataResDownload);
+  if (dataResDownload.status && dataResDownload.codigo == '0000') {
 
-    if(dataResDownload.status && dataResDownload.codigo=='0000')
-{
-
-    const server_url=process.env.SERVER_URL
-   // agent.add(`Descargar Resolución : ${server_url}/download-resolucion-pensionista/${dataResDownload.data}`);
-
+    const server_url = process.env.SERVER_URL;
     let texto = `Descargar Resolución : 
-    ${server_url}/download-resolucion-pensionista/${dataResDownload.data}`;  
-        const payload = {
-              "telegram": {
-                  "text": texto,
-                  "reply_markup": {
-                    "inline_keyboard": [
-                      [{"text": "Regresar al menú principal","callback_data": "menu"}],
-                      [{"text": "Finalizar conversación","callback_data": "finalizar"}]
-                    ]
-                  },"parse_mode": "HTML"
-                }
-              }
-        agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));
+    ${server_url}/download-resolucion-pensionista/${dataResDownload.data}`;
+    const payload = {
+      "telegram": {
+        "text": texto,
+        "reply_markup": {
+          "inline_keyboard": [
+            [{"text": "Regresar al menú anterior","callback_data": "menu_asegurado"}],
+            [{ "text": "Regresar al menú principal", "callback_data": "menu" }],
+            [{ "text": "Finalizar conversación", "callback_data": "finalizar" }]
+          ]
+        }, "parse_mode": "HTML"
+      }
+    };
+    agent.add(new Payload(agent.TELEGRAM, payload, { rawPayload: true, sendAsMessage: true }));
+   // agent.context.set({ name: 'set_boleta_descargar', lifespan: 1, parameters: expedientes });  
+    //agent.context.set({ name: 'set_resolucion_det', lifespan: 1, parameters: expedientes });  
+
+    agent.context.set({ name: 'set_menu_asegurado', lifespan: 1, parameters: identificacion });  
+    agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });   
+
+    
+  }
+
+
 
 
 
@@ -212,10 +184,4 @@ async function handleIntentPResolucionDownload(agent) {
 
 
 
-
- 
-}
-
-
-
-  module.exports = {handleIntentPResolucion,handleIntentPResolucionDetalle,handleIntentPResolucionDownload};
+module.exports = { handleIntentPResolucion, handleIntentPResolucionDetalle, handleIntentPResolucionDownload };

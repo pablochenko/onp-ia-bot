@@ -1,7 +1,53 @@
 const { Card, Suggestion, Payload } = require('dialogflow-fulfillment');
 
 const v_sedes = require('../json/sedes.json'); 
-//const v_regiones = require('./regiones.json'); 
+const v_sedes_horarios = require('../json/sedes_horarios.json'); 
+const v_departamentos = require('../json/departamentos.json'); 
+
+function sedes_horarios(agent) {     
+  let texto = '<b>¡Sedes y horarios de atención!</b>\nPor favor selecciona la región que deseas consultar';  
+  let opciones = payload_opciones();
+  const payload = {
+    "telegram": {
+        "text": texto,
+        "reply_markup": {
+          "inline_keyboard": opciones
+        },
+        "parse_mode": "HTML"
+      }
+    }
+  agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));
+}
+
+function payload_opciones(){  
+  let _departamentos = v_departamentos;
+  _departamentos.sort( (a, b) => {    
+    if (a.departamento.toUpperCase() < b.departamento.toUpperCase()) return -1;
+    if (a.departamento.toUpperCase() > b.departamento.toUpperCase()) return 1;
+    return 0;
+  });
+  let opciones = [];
+  let departamentos = [];
+  departamentos.push({"text": "LIMA METROPOLITANA","callback_data": "LIMA_METROP"});
+  departamentos.push({"text": "LIMA PROVINCIAS","callback_data": "LIMA_PROV"});
+  opciones.push(departamentos);
+  departamentos = [];  
+  departamentos.push({"text": "CALLAO","callback_data": "CALLAO"});
+  for (const dep of _departamentos) { 
+    if (dep.departamento.toUpperCase() != 'LIMA' && dep.departamento.toUpperCase() != 'PROV.CONST.CALLAO') {
+      departamentos.push({"text": dep.departamento,"callback_data": dep.departamento});    
+    }
+    if(departamentos.length == 4){
+      opciones.push(departamentos);
+      departamentos = [];
+    }       
+  } 
+  if(departamentos.length >0)opciones.push(departamentos);  
+  opciones.push([{"text": "Regresar al menú principal","callback_data": "menu"}]);
+  opciones.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
+  return opciones;
+}
+
 
 function sedes_horarios_info(agent) {         
     const sede_region=agent.parameters.sede_region;  
@@ -53,4 +99,9 @@ function sedes_horarios_info(agent) {
   }
 
 
-  module.exports = sedes_horarios_info;
+  //module.exports = sedes_horarios_info;
+
+  module.exports = {
+    sedes_horarios,
+    sedes_horarios_info
+}

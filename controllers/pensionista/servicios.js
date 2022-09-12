@@ -16,7 +16,6 @@ function handleResponse(status,codigo,mensaje,data) {
   }
 
   function getResoluciones(stoken,id) {
-    console.log('data');
 
     //const authorization = {Authorization: `Bearer ${stoken}`};
     //const headers = { 'Content-Type': 'application/json' };
@@ -33,6 +32,9 @@ function handleResponse(status,codigo,mensaje,data) {
           if(data && data.Codigo=='0000')
           {
             resolve(handleResponse(true,'0000','ok', data.Result.DatosDetalle));
+          }else{
+            resolve(handleResponse(false,'0404','Estamos presentando problemas con el servicio',[]));
+
           }
           //resolve(handleResponse(true,'0000','ok', data));
   

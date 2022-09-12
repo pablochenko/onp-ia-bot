@@ -9,7 +9,12 @@ async function handleIntentUpdateDatos(agent) {
     
     console.log('handleIntentUpdateDatos');
    //console.log(agent.context.get("2identificacion-valid-followup"));
-    let dataContexto = agent.context.get("2identificacion-valid-followup").parameters;
+   // let dataContexto = agent.context.get("2identificacion-valid-followup").parameters;
+    let dataContexto = agent.context.get("set_actualizacion").parameters;
+
+    
+    console.log(dataContexto);
+
     
     const tipDoc = dataContexto.per_tipo_doc;
     const numDoc = dataContexto.per_num_doc;
@@ -26,8 +31,8 @@ async function handleIntentUpdateDatos(agent) {
     console.log(correo);
 */
 
-    const tokenLogin = await getTokenLogin();
-    const updateDatos = await getApiUpdateDatos(idUser,tipDoc,numDoc,correo,celular,tokenLogin.data);
+    //const tokenLogin = await getTokenLogin();
+    const updateDatos = await getApiUpdateDatos(idUser,tipDoc,numDoc,correo,celular);
 
    //console.log(tokenLogin);
    console.log(updateDatos);

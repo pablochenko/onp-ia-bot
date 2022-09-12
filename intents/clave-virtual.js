@@ -1,19 +1,19 @@
 const { Card, Suggestion, Payload } = require('dialogflow-fulfillment');
 
-const {getValidDni,getConsultarUserExiste} = require('../controllers/clave-virtual');
+const {getValidDni,getConsultarUserExiste,getValidOlvideClave,getEnviarCorreo} = require('../controllers/clave-virtual');
 
 function handleIntentClaveVirtual(agent) {
     
     console.log('handleIntentClaveVirtual');
 
-     let texto = `¡Solicita o recupera tu Clave Virtual!
-    Con clave virtual, accedes a tus servicios preferidos de manera rápida y segura.`;  
+     let texto = `<b>¡Solicita o recupera tu Clave Virtual!🔐</b>\nCon clave virtual puedes acceder a tus servicios de manera rápida y segura.🤝`;  
     const payload = {
           "telegram": {
               "text": texto,
+              "parse_mode": "HTML",
               "reply_markup": {
                 "inline_keyboard": [
-                  [{"text": "Solicitar Clave Virtual", "callback_data": "solicitar_clave"}],
+                  [{"text": "Solicitar mi Clave Virtual", "callback_data": "solicitar_clave"}],
                   [{ "text": "Recuperar mi Clave Virtual", "callback_data": "recuperar_clave" }],
                   [{ "text": "Regresar al menú principal", "callback_data": "menu" }],
                   [{ "text": "Finalizar conversación", "callback_data": "finalizar" }]
@@ -27,9 +27,7 @@ function handleIntentClaveVirtual(agent) {
 
   function handleIntentClaveVirtualRecuperar(agent) {
 
-    const text = `<b>¡Consulta información de tu cuenta!</b>
-Para acceder a tu cuenta necesitamos validar tu identidad.
-Por favor, indícame tu tipo de documento:`;
+    const text = `<b>¡Consulta información de tu cuenta!</b>🕵️‍♂️\nEstimado/a asegurado/a para acceder a tu cuenta necesitamos validar tu identidad.\nPor favor, selecciona tu tipo de documento:`;
   
     const inline_keyboard = [
       [
@@ -66,9 +64,23 @@ Por favor, indícame tu tipo de documento:`;
     if(validDni.status && validDni.codigo=='0000')
     {
         const consultarUserExiste = await getConsultarUserExiste(per_tipo_doc,per_num_doc);
+        //consultarUserExiste.codigo=='0006' usuario no tiene clave virtual -- validar
         if(consultarUserExiste.status && consultarUserExiste.codigo=='0000')
         {
+          const {TipoDocumentoId,NumeroDocumento,ApellidoMaterno}=consultarUserExiste.data;
+
+          console.log(consultarUserExiste.data);
+
+          const idProceso=validDni.data.IdProceso;
+
+          const validOlvideClave= await getValidOlvideClave(idProceso,TipoDocumentoId,NumeroDocumento,ApellidoMaterno);
+
+          const enviarCorreo= await getEnviarCorreo(idProceso);
+
+          console.log(enviarCorreo);
+
           mensaje = `${persona} se envió a su 📧correo electrónico "${consultarUserExiste.data.Correo}" un link para que pueda recuperar su 🔐 clave virtual`;  
+
         }else{
           mensaje = `${persona} usted no cuenta con una clave virtual.
 solicite su 🔐 clave virtual en la opción de "Solicitar Clave Virtual"`;  
@@ -83,7 +95,7 @@ solicite su 🔐 clave virtual en la opción de "Solicitar Clave Virtual"`;
     //validDni.data.IdProceso
 
 
-    console.log(validDni);
+    //console.log(validDni);
 
      texto = mensaje;  
     const payload = {

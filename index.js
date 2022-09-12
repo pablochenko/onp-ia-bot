@@ -10,7 +10,7 @@ const {cronograma,cronograma_info} = require('./intents/cronograma');
 const welcome = require('./intents/bienvenida');
 const {handleIntentIdentificacion,handleIntentIdentificacionValid} = require('./intents/identificacion');
 const {handleIntentBoletaPago,handleIntentBoletaPagoDownload} = require('./intents/boleta');
-const sedes_horarios_info = require('./intents/sedes');
+const {sedes_horarios,sedes_horarios_info} = require('./intents/sedes');
 const {handleIntentPResolucion,handleIntentPResolucionDetalle,handleIntentPResolucionDownload} = require('./intents/pensionista-resolucion');
 
 const {handleIntentClaveVirtual,handleIntentClaveVirtualRecuperar,handleIntentClaveVirtualValidUser} = require('./intents/clave-virtual');
@@ -18,6 +18,7 @@ const handleIntentUpdateDatos = require('./intents/update-datos');
 
 const {getTokenLoginValid,getValidDni}= require('./controllers/clave-virtual');
 
+const handleIntentConstanciaAfiliacion = require('./intents/constancia-afiliacion');
 
 const app = express()
 app.use(express.json())
@@ -82,6 +83,16 @@ res.download(file);
  
  })
 
+ app.get('/download-consulta-afiliado/:nudoc', (req, res) => {
+
+  let nudoc = req.params.nudoc;
+  const namePdf=`consulta_de_afiliacion_${nudoc}.pdf`;  
+  const file =`${__dirname}/${namePdf}`; 
+  console.log(file);
+  res.download(file);   
+   })
+
+
 app.get('/', (req, res) => {
 res.send("servidor funcionando..212.xx-01")
 /*
@@ -115,13 +126,66 @@ Selecciona el servicio que desees consultar:`;
                 [{"text": "Solicitar o recuperar mi Clave virtual", "callback_data": "clave_virtual"}],
                 [{"text": "Consultar el cronograma de pagos","callback_data": "cronograma"}],
                 [{"text": "Conocer las Sedes y los horarios de atención","callback_data": "sedes_horarios"}],
-                [{"text": "Soy un servidor de ONP","callback_data": "usuario_interno"}],               
-
+                [{"text": "Soy un servidor de ONP","callback_data": "usuario_interno"}],                 
+                [{"text": "Finalizar conversación","callback_data": "finalizar"}]   
               ]
             },"parse_mode": "HTML"
           }
         }
   agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));
+}
+
+/*
+    let parametros = {
+      'per_num_doc': per_num_doc,
+      'per_tipo_doc': per_tipo_doc,
+      'token': tokenJwt.data,
+      'id_user': datDec.UserId,
+      'type_user': datDec.TypeUser,
+      'name_user': datDec.Name,
+      'fullname_user': datDec.FullName
+    };
+*/
+function menu_asegurado(agent) {
+  //let parametros = {};
+  const identificacion = agent.context.get("set_menu_asegurado").parameters;
+  //const identificacion = dataRes.identificacion;
+  //let parametros = identificacion;
+
+  if (identificacion.type_user == 'P') {
+    inline_keyboard = [
+      [{ "text": "Obtener Constancia de Pago", "callback_data": "boleta" }],
+      [{ "text": "Consultar Resolucion", "callback_data": "resolucion" }],
+      [{ "text": "Actualizar correo y/o teléfono", "callback_data": "actualizacion_ficha_asegurado" }],
+      [{ "text": "Regresar al menú principal", "callback_data": "menu" }],
+      [{ "text": "Finalizar conversación", "callback_data": "finalizar" }]
+    ];
+  } else if (datDec.type_user == 'A' || datDec.type_user == 'NA') {
+    inline_keyboard = [
+      [{ "text": "Constancia de afiliación", "callback_data": "constancia_afiliacion" },],
+      [{ "text": "Actualizar correo y/o teléfono", "callback_data": "actualizacion_ficha_asegurado" }],
+      [{ "text": "Cual es mi último aporte", "callback_data": "ultimo_aporte" }],
+      [{ "text": "Regresar al menú principal", "callback_data": "menu" }],
+      [{ "text": "Finalizar conversación", "callback_data": "finalizar" }]
+    ];
+  }
+
+  const texto = `${identificacion.name_user}, selecciona el servicio que desees consultar:`;  
+  //const texto = `Pensionista selecciona el servicio que desees consultar:`; 
+  const payload = {
+        "telegram": {
+            "text": texto,
+            "reply_markup": {
+            "inline_keyboard": inline_keyboard
+            },"parse_mode": "HTML"
+          }
+        }
+  agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));
+  agent.context.set({ name: 'set_boleta', lifespan: 1, parameters: identificacion });
+  agent.context.set({ name: 'set_resolucion', lifespan: 1, parameters: identificacion });
+  agent.context.set({ name: 'set_actualizacion', lifespan: 1, parameters: identificacion });
+  agent.context.set({ name: 'set_menu', lifespan: 1, parameters: {} });
+  agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });
 }
 /*
 app.post("/webhookx", (request, response) => {
@@ -185,9 +249,14 @@ app.post('/webhook', (req, res) => {
   intentMap.set('2.2.1 Resolucion Pensionista Detalle', handleIntentPResolucionDetalle);
   intentMap.set('2.2.1.1 Resolucion Pensionista Download', handleIntentPResolucionDownload);
   intentMap.set('2.3 Actualizacion datos', handleIntentUpdateDatos);
+  //intentMap.set('2.5 Ultimo Aporte', handleIntentUltimoAporte);
+  intentMap.set('2.4 Constancia Afiliacion', handleIntentConstanciaAfiliacion);
+
+  
 
   intentMap.set('4 Cronograma de pagos', cronograma);
   intentMap.set('4.1 Cronograma de pagos - info', cronograma_info);
+  intentMap.set('5 Sedes y horarios', sedes_horarios);
   intentMap.set('5.1 Sedes y horarios - info', sedes_horarios_info);
 
   intentMap.set('3 Clave virtual', handleIntentClaveVirtual);
@@ -201,6 +270,7 @@ app.post('/webhook', (req, res) => {
 
   intentMap.set('Cierra sesion', cierra_sesion);
   intentMap.set('Menu principal', menu_principal);
+  intentMap.set('Menu asegurado', menu_asegurado);
   agent.handleRequest(intentMap)
 })
 
