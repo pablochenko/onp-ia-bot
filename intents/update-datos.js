@@ -1,51 +1,27 @@
 const { Card, Suggestion, Payload } = require('dialogflow-fulfillment');
 
-//const {getBoletaPago} = require('../controllers/boleta');
 const {getTokenLogin} = require('../controllers/clave-virtual');
 const {getApiUpdateDatos} = require('../controllers/update-datos');
 
 
-async function handleIntentUpdateDatos(agent) {
-    
+async function handleIntentUpdateDatos(agent) {    
     console.log('handleIntentUpdateDatos');
-   //console.log(agent.context.get("2identificacion-valid-followup"));
-   // let dataContexto = agent.context.get("2identificacion-valid-followup").parameters;
-    let dataContexto = agent.context.get("set_actualizacion").parameters;
-
-    
-    console.log(dataContexto);
-
-    
-    const tipDoc = dataContexto.per_tipo_doc;
-    const numDoc = dataContexto.per_num_doc;
-    
-    //const token = dataContexto.token;
-    const idUser = dataContexto.id_user;
-    //const typeUser = dataContexto.type_user;
+    const identificacion = agent.context.get("set_actualizacion").parameters;    
+    console.log(identificacion);    
+    const tipDoc = identificacion.per_tipo_doc;
+    const numDoc = identificacion.per_num_doc;
+    const idUser = identificacion.id_user;
     const correo = agent.parameters.per_correo;
     const celular = agent.parameters.per_celular;
-/*
-    console.log(idUser);
-    console.log(tipDoc);
-    console.log(celular);
-    console.log(correo);
-*/
 
-    //const tokenLogin = await getTokenLogin();
     const updateDatos = await getApiUpdateDatos(idUser,tipDoc,numDoc,correo,celular);
 
-   //console.log(tokenLogin);
    console.log(updateDatos);
-
-  // agent.add('aaaaa');
   
     let texto='';
     if(updateDatos.status)
     {
-     //const parametros = {'anio': anio, 'per_num_doc': per_num_doc, 'mes': mes };
-    // console.log(parametros);
-    // console.log(dataBoletaPago);
-    texto = `Estimado(a) se actualizaron sus datos 👍`;  
+    texto = `Estimado(a) ${identificacion.name_user}, tus datos de contacto fueron actualizados. 👍`;  
 
   }else
   {
@@ -56,19 +32,16 @@ async function handleIntentUpdateDatos(agent) {
     "telegram": {
         "text": texto,
         "reply_markup": {
-          "inline_keyboard": [
-           // [{"text": "Consultar Boleta de Pago", "callback_data": "boleta"}],
-           // [{ "text": "Obtener Resolucion", "callback_data": "resolucion" }]
-           // [{"text": "Consultar Boleta de Pago", "callback_data": "boleta"}],
-          //  [{ "text": "Otras consultas", "callback_data": "otras_consultas" }],                  
-            [{ "text": "Regresar al menú principal", "callback_data": "menu" }],
+          "inline_keyboard": [                
+            [{ "text": "Regresar al menú anterior", "callback_data": "menu_asegurado" }],
             [{ "text": "Finalizar conversación", "callback_data": "finalizar" }]
           ]
         }
       }
     }
-agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true})); 
-
+  agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true})); 
+  agent.context.set({ name: 'set_menu_asegurado', lifespan: 1, parameters: identificacion });  
+  agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {}});   
 
   
   }
