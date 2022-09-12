@@ -54,18 +54,18 @@ function sedes_horarios_info(agent) {
     //const contextIn = agent.getContext('identificacion-followup');
     //const per_nombre = contextIn.parameters.per_nombre;
     agent.add(`¡Conoce nuestras sedes en ${sede_region}!`); 
-    for (const sede of v_sedes) {   
-      if((sede_region.toUpperCase() == (sede.region).toUpperCase()) || 
-         (sede_region.toUpperCase() == 'LIMA_METROP' && (sede.provincia).toUpperCase()== 'LIMA') ||
-         (sede_region.toUpperCase() == 'LIMA_PROV' && (sede.region).toUpperCase()== 'LIMA'&& (sede.provincia).toUpperCase()!= 'LIMA')|| 
-         (sede_region.toUpperCase() == 'CALLAO' && (sede.region).toUpperCase()== 'PROV.CONST.CALLAO') ){
-        let direccion = (sede.direccion == 'S/D')? (sede.region+' - '+sede.provincia+' - '+sede.distrito) : (sede.direccion+'\n'+sede.region+' - '+sede.provincia+' - '+sede.distrito);
-        let horario = (sede.horario == 'S/D')? 'Sin datos': ('\nHorario de atención: '+sede.horario);
-        let mapa = (sede.maps == 'S/D')? 'Sin datos': sede.maps;
-        let imagen = (sede.imagen == 'S/D')? 'Sin datos': sede.imagen;
+    for (const sede of v_sedes_horarios) {   
+      if((sede_region.toUpperCase() == (sede.ubigeo.departamento).toUpperCase()) || 
+         (sede_region.toUpperCase() == 'LIMA_METROP' && (sede.ubigeo.provincia).toUpperCase()== 'LIMA') ||
+         (sede_region.toUpperCase() == 'LIMA_PROV' && (sede.ubigeo.departamento).toUpperCase()== 'LIMA'&& (sede.ubigeo.provincia).toUpperCase()!= 'LIMA')|| 
+         (sede_region.toUpperCase() == 'CALLAO' && (sede.ubigeo.departamento).toUpperCase()== 'PROV.CONST.CALLAO') ){
+        let direccion = (sede.direccion == 'S/D')? (sede.ubigeo.departamento+' - '+sede.ubigeo.provincia+' - '+sede.ubigeo.distrito) : (sede.direccion+'\n'+sede.ubigeo.departamento+' - '+sede.ubigeo.provincia+' - '+sede.ubigeo.distrito);
+        let horario = (sede.horarioLv == 'S/D')? 'Sin datos': ('\nHorario de atención: '+sede.horarioLv);
+        let mapa = (sede.maps == 'S/D')? 'Sin datos': `https:\/\/maps.google.com\/maps?daddr=${sede.latitud},${sede.longitud}&ll=`;
+        let imagen = (sede.foto == 'S/D')? 'Sin datos': sede.foto;
         agent.add(new Card({
-            title: sede.tipo + ' - '+ sede.descripcion,
-            text: direccion+horario,
+            title: sede.tipoCentroAtencion.tipoCentroAtencion + ' - '+ sede.centroAtencion,
+            text: direccion+'\n'+horario,
             imageUrl: imagen,
             buttonText: 'Ver en Maps',
             buttonUrl: mapa
