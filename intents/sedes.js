@@ -94,7 +94,9 @@ function sedes_horarios_info(agent) {
                           [ {"text": "Finalizar conversación","callback_data": "finalizar"  }]]
                         },"parse_mode": "HTML"
                       } }; 
-    agent.add(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));  
+    //agent.add(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));  
+    agent.add([
+      new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true})]);  
   }
 
 
