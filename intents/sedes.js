@@ -48,8 +48,8 @@ function payload_opciones(){
     }       
   } 
   if(departamentos.length >0){opciones.push(departamentos);  }
-  opciones.push({"text": "Regresar al menú principal","callback_data": "menu"});
-  opciones.push({"text": "Finalizar conversación","callback_data": "finalizar"});
+  opciones.push([{"text": "Regresar al menú principal","callback_data": "menu"}]);
+  opciones.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
   return opciones;
 }
 
