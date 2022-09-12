@@ -162,7 +162,7 @@ function menu_asegurado(agent) {
     inline_keyboard = [
       [{ "text": "Constancia de afiliación", "callback_data": "constancia_afiliacion" }],
       [{ "text": "Actualizar correo y/o teléfono", "callback_data": "actualizacion_ficha_asegurado" }],
-      [{ "text": "Cual es mi último aporte", "callback_data": "ultimo_aporte" }],
+      
       [{ "text": "Regresar al menú principal", "callback_data": "menu" }],
       [{ "text": "Finalizar conversación", "callback_data": "finalizar" }]
     ];
@@ -182,8 +182,9 @@ function menu_asegurado(agent) {
   agent.context.set({ name: 'set_boleta', lifespan: 1, parameters: identificacion });
   agent.context.set({ name: 'set_resolucion', lifespan: 1, parameters: identificacion });
   agent.context.set({ name: 'set_actualizacion', lifespan: 1, parameters: identificacion });
-  
+
   agent.context.set({ name: 'set_constancia_afiliacion', lifespan: 1, parameters: identificacion });
+
   agent.context.set({ name: 'set_menu', lifespan: 1, parameters: {} });
   agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });
 }
