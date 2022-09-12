@@ -61,7 +61,7 @@ function sedes_horarios_info(agent) {
     let list_opc = [];
     //agent.add(`¡Conoce nuestras sedes en ${sede_region}!`); 
     
-    list_opc.push(Text(`¡Conoce nuestras sedes en ${sede_region}!`)); 
+    list_opc.push(new Text(`¡Conoce nuestras sedes en ${sede_region}!`)); 
     for (const sede of v_sedes) {   
       if((sede_region.toUpperCase() == (sede.region).toUpperCase()) || 
          (sede_region.toUpperCase() == 'LIMA METROPOLITANA' && (sede.provincia).toUpperCase()== 'LIMA') ||
@@ -71,7 +71,7 @@ function sedes_horarios_info(agent) {
         let horario = (sede.horario == 'S/D')? 'Sin datos': ('\nHorario de atención: '+sede.horario);
         let mapa = (sede.maps == 'S/D')? 'Sin datos': sede.maps;
         let imagen = (sede.imagen == 'S/D')? 'Sin datos': sede.imagen;
-        list_opc.push(Card({
+        list_opc.push(new Card({
           title: sede.tipo + ' - '+ sede.descripcion,
           text: direccion+horario,
           imageUrl: imagen,
@@ -101,7 +101,7 @@ function sedes_horarios_info(agent) {
           "parse_mode": "HTML"
         }
       }
-    list_opc.push(Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));
+    list_opc.push(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));
     agent.add(list_opc);
 
     /*agent.add(new Card({
