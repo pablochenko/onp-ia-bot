@@ -94,7 +94,7 @@ function sedes_horarios_info(agent) {
 
     const payload = {
       "telegram": {
-          "text": texto,
+          "text": 'texto',
           "reply_markup": {
             "inline_keyboard": opciones
           },
