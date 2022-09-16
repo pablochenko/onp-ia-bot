@@ -51,7 +51,7 @@ function lista_aplicativos(){
     opciones.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
     const payload = {
       "telegram": {
-          "text": '<b>¡Seleccione una opción:',
+          "text": '<b>¡Seleccione una opción:</b>',
           "reply_markup": {
             "inline_keyboard": opciones
           },
