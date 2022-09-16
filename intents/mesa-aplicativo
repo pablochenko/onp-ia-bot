@@ -1,6 +1,6 @@
 const { Card, Suggestion, Payload } = require('dialogflow-fulfillment');
 
-//const v_sedes = require('../json/sedes.json'); 
+const url_aranda =  "http://onpsrvaraweb12.onp.net/USDKV8/index.aspx#/home/kb"; 
 
 function mesa_menu(agent) {      
   const payload = lista_aplicativos();   
@@ -59,18 +59,17 @@ function mesa_appens_respuesta(agent) {
       text = 'Estimado(a) colaborador(a):\nLas solicitudes de movimiento de Token deben ser remitidas por su lider usuario al correo 📧 <b>EQAPPENSOTI@onp.gob.pe</b>';      
       break;
     case "APPENS_3":
-      text = 'Estimado(a) colaborador(a): por favor genere un ticket de atención.👇';   
+      text = `Estimado(a) colaborador(a): por favor genere un ticket de atención.👉 <a href=${url_aranda}>Aranda</a>`;   
       break; 
     case "APPENS_4":
-      text = 'Estimado(a) colaborador(a): por favor genere un ticket de atención.👇';   
+      text = `Estimado(a) colaborador(a): por favor genere un ticket de atención.👉 <a href='${url_aranda}'>Aranda</a>`;  
       break;  
     case "APPENS_5":
-      text = 'Estimado(a) colaborador(a): por favor genere un ticket de atención.👇';   
+      text = `Estimado(a) colaborador(a): por favor genere un ticket de atención.👉 ${url_aranda}`;  
       break;
   }
   
-  let menu = [];
-  menu.push([{"text": "Generar ticket de atención","callback_data":"http://onpsrvaraweb12.onp.net/USDKV8/index.aspx#/home/kb"}]);    
+  let menu = [];   
   menu.push([{"text": "Regresar al menú principal","callback_data": "menu"}]);
   menu.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
   const payload = {
