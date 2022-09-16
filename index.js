@@ -23,7 +23,7 @@ const handleIntentConstanciaAfiliacion = require('./intents/constancia-afiliacio
 //mesa de ayuda
 
 
-const {mesa_menu,mesa_aplicativo}= require('./intents/mesa-menu');
+const {mesa_menu,mesa_aplicativo}= require('./intents/mesa-aplicativo');
 
 
 const app = express()
