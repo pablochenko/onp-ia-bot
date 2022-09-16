@@ -13,13 +13,24 @@ function mesa_menu(agent) {
 
 
 function mesa_appens_menu(agent){
-  //let item = agent.parameters.boteta_fec_emision;
+  let item = agent.parameters.app_id;
   let aplicaciones = [];
-  aplicaciones.push([{"text": "Lentitud en APPENS","callback_data":"APPENS_1"},{"text": "Mover Token","callback_data":"APPENS_2"}]);
-  aplicaciones.push([{"text": "Reasignar documentos","callback_data":"APPENS_3"},{"text": "Reemplazar documentos","callback_data":"APPENS_4"}]);
-  aplicaciones.push([{"text": "Inoperar solicitudes","callback_data":"APPENS_5"}]);    
-  aplicaciones.push([{"text": "Regresar al menú principal","callback_data": "menu"}]);
-  aplicaciones.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
+  switch (item) {
+    case "APPENS":
+      aplicaciones.push([{"text": "Lentitud en APPENS","callback_data":"APPENS_1"},{"text": "Mover Token","callback_data":"APPENS_2"}]);
+      aplicaciones.push([{"text": "Reasignar documentos","callback_data":"APPENS_3"},{"text": "Reemplazar documentos","callback_data":"APPENS_4"}]);
+      aplicaciones.push([{"text": "Inoperar solicitudes","callback_data":"APPENS_5"}]);    
+      aplicaciones.push([{"text": "Regresar al menú principal","callback_data": "menu"}]);
+      aplicaciones.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
+      break;
+    case "NSP":
+      aplicaciones.push([{"text": "Lentitud en NSP","callback_data":"APPENS_1"},{"text": "Mover Token","callback_data":"APPENS_2"}]);
+      aplicaciones.push([{"text": "Reasignar documentos","callback_data":"APPENS_3"},{"text": "Reemplazar documentos","callback_data":"APPENS_4"}]);
+      aplicaciones.push([{"text": "Inoperar solicitudes","callback_data":"APPENS_5"}]);    
+      aplicaciones.push([{"text": "Regresar al menú principal","callback_data": "menu"}]);
+      aplicaciones.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
+      break;
+  }
   const payload = {
       "telegram": {
           "text": 'Por favor seleccione una opción:',
@@ -42,19 +53,19 @@ function mesa_appens_respuesta(agent) {
   let text = '';
   switch (item) {
     case "APPENS_1":
-      text = 'Estimado(a) colaborador(a):\n-Si el incidente lo presentan varios usuarios, por favor genere un ticket de atención.\n-Si es solo en su equipo, debe limpiar los archivos temporales de internet. \nEn caso de persistir con el problema, por favor genere un ticket de atención.';
+      text = 'Estimado(a) colaborador(a):\n-Si el incidente lo presentan varios usuarios, por favor genere un ticket de atención.\n-Si es solo en su equipo, debe limpiar los archivos temporales de internet.🌐⏳ \nEn caso de persistir con el problema, por favor genere un ticket de atención.👇';
       break;
     case "APPENS_2":
-      text = 'Estimado(a) colaborador(a):\nLas solicitudes de movimiento de Token deben ser remitidas por su lider usuario al correo <b>EQAPPENSOTI@onp.gob.pe</b>';      
+      text = 'Estimado(a) colaborador(a):\nLas solicitudes de movimiento de Token deben ser remitidas por su lider usuario al correo 📧 <b>EQAPPENSOTI@onp.gob.pe</b>';      
       break;
     case "APPENS_3":
-      text = 'Estimado(a) colaborador(a): por favor genere un ticket de atención.';   
+      text = 'Estimado(a) colaborador(a): por favor genere un ticket de atención.👇';   
       break; 
     case "APPENS_4":
-      text = 'Estimado(a) colaborador(a): por favor genere un ticket de atención.';   
+      text = 'Estimado(a) colaborador(a): por favor genere un ticket de atención.👇';   
       break;  
     case "APPENS_5":
-      text = 'Estimado(a) colaborador(a): por favor genere un ticket de atención.';   
+      text = 'Estimado(a) colaborador(a): por favor genere un ticket de atención.👇';   
       break;
   }
   
