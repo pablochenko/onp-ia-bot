@@ -59,7 +59,7 @@ function mesa_appens_respuesta(agent) {
   }
   
   let menu = [];
-  menu.push([{"text": "Generar ticket de atención","callback_data":"..."}]);    
+  menu.push([{"text": "Generar ticket de atención","callback_data":"http://onpsrvaraweb12.onp.net/USDKV8/index.aspx#/home/kb"}]);    
   menu.push([{"text": "Regresar al menú principal","callback_data": "menu"}]);
   menu.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
   const payload = {
