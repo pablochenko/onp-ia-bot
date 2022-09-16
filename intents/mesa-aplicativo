@@ -15,14 +15,14 @@ function mesa_menu(agent) {
 function mesa_appens_menu(agent){
   //let item = agent.parameters.boteta_fec_emision;
   let aplicaciones = [];
-  aplicaciones.push([{"text": "Lentitud en APPENS","callback_data":"APPENS_LENTITUD"},{"text": "Mover Token","callback_data":"APPENS_TOKEN"}]);
-  aplicaciones.push([{"text": "Reasignar documentos","callback_data":"APPENS_DOCU"},{"text": "Reemplazar documentos","callback_data":"APPENS_REEM"}]);
-  aplicaciones.push([{"text": "Inoperar solicitudes","callback_data":"APPENS_INOP"}]);    
+  aplicaciones.push([{"text": "Lentitud en APPENS","callback_data":"APPENS_1"},{"text": "Mover Token","callback_data":"APPENS_2"}]);
+  aplicaciones.push([{"text": "Reasignar documentos","callback_data":"APPENS_3"},{"text": "Reemplazar documentos","callback_data":"APPENS_4"}]);
+  aplicaciones.push([{"text": "Inoperar solicitudes","callback_data":"APPENS_5"}]);    
   aplicaciones.push([{"text": "Regresar al menú principal","callback_data": "menu"}]);
   aplicaciones.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
   const payload = {
       "telegram": {
-          "text": '<b>¡Seleccione una aplicación:</b>',
+          "text": 'Por favor seleccione una opción:',
           "reply_markup": {
             "inline_keyboard": aplicaciones
           },
@@ -31,15 +31,52 @@ function mesa_appens_menu(agent){
       };  
   agent.add(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));
   
-  agent.context.set({ name: 'set_mesa_appens_menu', lifespan: 1, parameters: {} });
+  agent.context.set({ name: 'set_mesa_appens_respuesta', lifespan: 1, parameters: {} });
   agent.context.set({ name: 'set_menu', lifespan: 1, parameters: {} });
   agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });
 }
 
 
-function mesa_aplicativo(agent) {   
+function mesa_appens_respuesta(agent) {   
+  let item = agent.parameters.app_id_problema;
+  let text = '';
+  switch (item) {
+    case "APPENS_1":
+      text = 'Estimado/a usuario/a, si el incidente lo presentan varios usuarios, por favor genere un ticket de atención. \nSi el problema es solo en su equipo, debe limpiar los archivos temporales de internet. \nEn caso de persistir con el problema, por favor genere un ticket de atención.';
+      break;
+    case "APPENS_2":
+      text = 'Estimado/a usuario/a, las solicitudes de movimiento de Token deben ser remitidas por su lider usuario al correo EQAPPENSOTI@onp.gob.pe';      
+      break;
+    case "APPENS_3":
+      text = 'Estimado/a usuario/a, por favor genere un ticket de atención.';   
+      break; 
+    case "APPENS_4":
+      text = 'Estimado/a usuario/a, por favor genere un ticket de atención.';   
+      break;  
+    case "APPENS_5":
+      text = 'Estimado/a usuario/a, por favor genere un ticket de atención.';   
+      break;
+  }
+  
+  let menu = [];
+  menu.push([{"text": "Generar ticket de atención","callback_data":"..."}]);    
+  menu.push([{"text": "Regresar al menú principal","callback_data": "menu"}]);
+  menu.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
+  const payload = {
+    "telegram": {
+        "text": text,
+        "reply_markup": {
+          "inline_keyboard": menu
+        },
+        "parse_mode": "HTML"
+      }
+    };  
+  agent.add(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));
 
-    agent.add("Requerimeintos.....");  
+  
+  //agent.context.set({ name: 'set_mesa_appens_menu', lifespan: 1, parameters: {} });
+  agent.context.set({ name: 'set_menu', lifespan: 1, parameters: {} });
+  agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });
 
 }
 
@@ -58,29 +95,30 @@ function lista_aplicativos(){
     aplicaciones.push({"text": "NSP","callback_data":"NSP"});
     aplicaciones.push({"text": "NSTD","callback_data":"NSTD"});    
     aplicaciones.push({"text": "SAA","callback_data":"SAA"});
-    aplicaciones.push({"text": "APJ","callback_data":"APJ"});
     opciones.push(aplicaciones);
     aplicaciones = [];
+    aplicaciones.push({"text": "APJ","callback_data":"APJ"});
     aplicaciones.push({"text": "NSBR","callback_data":"NSBR"});
     aplicaciones.push({"text": "SIGA","callback_data":"SIGA"}); 
     aplicaciones.push({"text": "REFLEX","callback_data":"REFLEX"});
     aplicaciones.push({"text": "MCCIA","callback_data":"MCCIA"});
-    aplicaciones.push({"text": "SGCP","callback_data":"SGCP"});
-    aplicaciones.push({"text": "SIAF","callback_data":"SIAF"}); 
     opciones.push(aplicaciones);
     aplicaciones = [];
+    aplicaciones.push({"text": "SGCP","callback_data":"SGCP"});
+    aplicaciones.push({"text": "SIAF","callback_data":"SIAF"}); 
     aplicaciones.push({"text": "SPIJ","callback_data":"SPIJ"});
     aplicaciones.push({"text": "RCPJ","callback_data":"RCPJ"});
     aplicaciones.push({"text": "NSGA","callback_data":"NSGA"});
+    opciones.push(aplicaciones);
+    aplicaciones = [];
     aplicaciones.push({"text": "OTROS","callback_data":"Otros"}); 
     opciones.push(aplicaciones);
     aplicaciones = [];
-
     opciones.push([{"text": "Regresar al menú principal","callback_data": "menu"}]);
     opciones.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
     const payload = {
       "telegram": {
-          "text": '<b>¡Seleccione una aplicación:</b>',
+          "text": '<b>¡Bienvenido(a) a la mesa de ayuda de ONP!</b>🌟\nPor este medio te ayudaré con tus indicentes o problemas informáticos.🤝\nSelecciona una opcion para continuar:',
           "reply_markup": {
             "inline_keyboard": opciones
           },
@@ -92,5 +130,5 @@ function lista_aplicativos(){
 
 module.exports = {
     mesa_menu,
-    mesa_appens_menu
+    mesa_appens_menu,mesa_appens_respuesta
 }

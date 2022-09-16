@@ -23,7 +23,7 @@ const handleIntentConstanciaAfiliacion = require('./intents/constancia-afiliacio
 //mesa de ayuda
 
 
-const {mesa_menu,mesa_appens_menu}= require('./intents/mesa-aplicativo');
+const {mesa_menu,mesa_appens_menu,mesa_appens_respuesta}= require('./intents/mesa-aplicativo');
 
 
 const app = express()
@@ -287,6 +287,7 @@ app.post('/webhook', (req, res) => {
 
   
   intentMap.set('Mesa Appens menu', mesa_appens_menu);
+  intentMap.set('Mesa Appens respuesta', mesa_appens_respuesta);
   
   
   agent.handleRequest(intentMap)
