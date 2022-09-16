@@ -118,7 +118,6 @@ function sedes_horarios_info(agent) {
   }
 
 
-
   module.exports = {
     sedes_horarios,
     sedes_horarios_info

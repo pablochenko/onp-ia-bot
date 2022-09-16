@@ -1,0 +1,56 @@
+const { Card, Suggestion, Payload } = require('dialogflow-fulfillment');
+
+//const v_sedes = require('../json/sedes.json'); 
+
+function mesa_menu(agent) {      
+  let list_opc = lista_aplicativos();
+  agent.add(list_opc);  
+  agent.context.set({ name: 'set_mesa_aplicativo', lifespan: 1, parameters: {} });
+  agent.context.set({ name: 'set_menu', lifespan: 1, parameters: {} });
+  agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });
+}  
+
+
+
+function mesa_aplicativo(agent) {   
+
+    agent.add("Requerimeintos.....");  
+
+}
+
+function lista_aplicativos(){    
+    let list_opc = [];
+    let opciones=[];
+    opciones.push([{"text": "APPENS","callback_data":"APPENS"}]);
+    opciones.push([{"text": "STD","callback_data":"STD"}]);
+    opciones.push([{"text": "NSP","callback_data":"NSP"}]);
+    opciones.push([{"text": "NSTD","callback_data":"NSTD"}]);
+    opciones.push([{"text": "SAA","callback_data":"SAA"}]);
+    opciones.push([{"text": "APJ","callback_data":"APJ"}]);
+    opciones.push([{"text": "NSBR","callback_data":"NSBR"}]);
+    opciones.push([{"text": "SIGA","callback_data":"SIGA"}]);
+    opciones.push([{"text": "REFLEX","callback_data":"REFLEX"}]);
+    opciones.push([{"text": "MCCIA","callback_data":"MCCIA"}]);
+    opciones.push([{"text": "SGCP","callback_data":"SGCP"}]);
+    opciones.push([{"text": "SIAF","callback_data":"SIAF"}]);
+    opciones.push([{"text": "SPIJ","callback_data":"SPIJ"}]);
+    opciones.push([{"text": "RCPJ","callback_data":"RCPJ"}]);
+    opciones.push([{"text": "NSGA","callback_data":"NSGA"}]);
+    opciones.push([{"text": "OTROS","callback_data":"Otros"}]);
+    const payload = {
+      "telegram": {
+          "text": '<b>¡Seleccione una opción:',
+          "reply_markup": {
+            "inline_keyboard": opciones
+          },
+          "parse_mode": "HTML"
+        }
+      }
+    list_opc.push(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));
+    return list_opc;
+}
+
+module.exports = {
+    mesa_menu,
+    mesa_aplicativo
+}

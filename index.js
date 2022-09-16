@@ -13,12 +13,18 @@ const {handleIntentBoletaPago,handleIntentBoletaPagoDownload} = require('./inten
 const {sedes_horarios,sedes_horarios_info} = require('./intents/sedes');
 const {handleIntentPResolucion,handleIntentPResolucionDetalle,handleIntentPResolucionDownload} = require('./intents/pensionista-resolucion');
 
-const {handleIntentClaveVirtual,handleIntentClaveVirtualRecuperar,handleIntentClaveVirtualValidUser} = require('./intents/clave-virtual');
+const {handleIntentClaveVirtual,handleIntentClaveVirtualCrear,handleIntentClaveVirtualRecuperar,handleIntentClaveVirtualValidUser} = require('./intents/clave-virtual');
 const handleIntentUpdateDatos = require('./intents/update-datos');
 
 const {getTokenLoginValid,getValidDni}= require('./controllers/clave-virtual');
 
 const handleIntentConstanciaAfiliacion = require('./intents/constancia-afiliacion');
+
+//mesa de ayuda
+
+
+const {mesa_menu,mesa_aplicativo}= require('./intents/mesa-menu');
+
 
 const app = express()
 app.use(express.json())
@@ -261,6 +267,7 @@ app.post('/webhook', (req, res) => {
   intentMap.set('5.1 Sedes y horarios - info', sedes_horarios_info);
 
   intentMap.set('3 Clave virtual', handleIntentClaveVirtual);
+  intentMap.set('3.1 Clave virtual - crear', handleIntentClaveVirtualCrear);
   intentMap.set('3.2 Clave virtual - recuperar', handleIntentClaveVirtualRecuperar);
   intentMap.set('3.2.1 Clave virtual - recuperar - valid', handleIntentClaveVirtualValidUser);
 
@@ -272,6 +279,12 @@ app.post('/webhook', (req, res) => {
   intentMap.set('Cierra sesion', cierra_sesion);
   intentMap.set('Menu principal', menu_principal);
   intentMap.set('Menu asegurado', menu_asegurado);
+
+//Mesa de ayuda
+  intentMap.set('Mesa menu', mesa_menu);
+  intentMap.set('Mesa aplicativo', mesa_aplicativo);
+
+  
   agent.handleRequest(intentMap)
 })
 
