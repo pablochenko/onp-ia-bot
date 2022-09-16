@@ -42,19 +42,19 @@ function mesa_appens_respuesta(agent) {
   let text = '';
   switch (item) {
     case "APPENS_1":
-      text = 'Estimado/a usuario/a, si el incidente lo presentan varios usuarios, por favor genere un ticket de atención. \nSi el problema es solo en su equipo, debe limpiar los archivos temporales de internet. \nEn caso de persistir con el problema, por favor genere un ticket de atención.';
+      text = 'Estimado(a) colaborador(a):\n-Si el incidente lo presentan varios usuarios, por favor genere un ticket de atención.\n-Si es solo en su equipo, debe limpiar los archivos temporales de internet. \nEn caso de persistir con el problema, por favor genere un ticket de atención.';
       break;
     case "APPENS_2":
-      text = 'Estimado/a usuario/a, las solicitudes de movimiento de Token deben ser remitidas por su lider usuario al correo EQAPPENSOTI@onp.gob.pe';      
+      text = 'Estimado(a) colaborador(a):\nLas solicitudes de movimiento de Token deben ser remitidas por su lider usuario al correo <b>EQAPPENSOTI@onp.gob.pe</b>';      
       break;
     case "APPENS_3":
-      text = 'Estimado/a usuario/a, por favor genere un ticket de atención.';   
+      text = 'Estimado(a) colaborador(a): por favor genere un ticket de atención.';   
       break; 
     case "APPENS_4":
-      text = 'Estimado/a usuario/a, por favor genere un ticket de atención.';   
+      text = 'Estimado(a) colaborador(a): por favor genere un ticket de atención.';   
       break;  
     case "APPENS_5":
-      text = 'Estimado/a usuario/a, por favor genere un ticket de atención.';   
+      text = 'Estimado(a) colaborador(a): por favor genere un ticket de atención.';   
       break;
   }
   
