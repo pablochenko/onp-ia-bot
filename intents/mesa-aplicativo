@@ -6,13 +6,13 @@ function mesa_menu(agent) {
   const payload = lista_aplicativos();   
   agent.add(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));
   
-  agent.context.set({ name: 'set_mesa_aplicativo', lifespan: 1, parameters: {} });
+  agent.context.set({ name: 'set_mesa_appens_menu', lifespan: 1, parameters: {} });
   agent.context.set({ name: 'set_menu', lifespan: 1, parameters: {} });
   agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });
 }  
 
 
-function appens_menu(agent){
+function mesa_appens_menu(agent){
   //let item = agent.parameters.boteta_fec_emision;
   let aplicaciones = [];
   aplicaciones.push([{"text": "Lentitud en la funcionalidad de APPENS","callback_data":"APPENS_LENTITUD"}]);
@@ -33,7 +33,7 @@ function appens_menu(agent){
       };  
   agent.add(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));
   
-  agent.context.set({ name: 'set_mesa_aplicativo', lifespan: 1, parameters: {} });
+  agent.context.set({ name: 'set_mesa_appens_menu', lifespan: 1, parameters: {} });
   agent.context.set({ name: 'set_menu', lifespan: 1, parameters: {} });
   agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });
 }
@@ -94,6 +94,5 @@ function lista_aplicativos(){
 
 module.exports = {
     mesa_menu,
-    appens_menu,
-    mesa_aplicativo
+    mesa_appens_menu
 }
