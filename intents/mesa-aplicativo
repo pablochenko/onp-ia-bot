@@ -3,8 +3,10 @@ const { Card, Suggestion, Payload } = require('dialogflow-fulfillment');
 //const v_sedes = require('../json/sedes.json'); 
 
 function mesa_menu(agent) {      
-  let list_opc = lista_aplicativos();
-  agent.add(list_opc);  
+  //let list_opc = lista_aplicativos();
+  //agent.add(list_opc);  
+  
+  agent.add("Requerimeintos1.....");  
   agent.context.set({ name: 'set_mesa_aplicativo', lifespan: 1, parameters: {} });
   agent.context.set({ name: 'set_menu', lifespan: 1, parameters: {} });
   agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });
