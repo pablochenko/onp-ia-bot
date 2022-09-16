@@ -23,7 +23,7 @@ function welcome(agent) {
     agent.context.set({ name: 'set_identificacion', lifespan: 1, parameters: parametros });
     agent.context.set({ name: 'set_clave', lifespan: 1, parameters: parametros });
     agent.context.set({ name: 'set_cronograma', lifespan: 1, parameters: parametros });
-    agent.context.set({ name: 'set_usuario_interno', lifespan: 1, parameters: parametros });
+    agent.context.set({ name: 'set_mesa_menu', lifespan: 1, parameters: parametros });
     agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: parametros });
   }
   module.exports = welcome;
