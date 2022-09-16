@@ -3,10 +3,9 @@ const { Card, Suggestion, Payload } = require('dialogflow-fulfillment');
 //const v_sedes = require('../json/sedes.json'); 
 
 function mesa_menu(agent) {      
-  //let list_opc = lista_aplicativos();
-  //agent.add(list_opc);  
+  const payload = lista_aplicativos();   
+  agent.add(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));
   
-  agent.add("Requerimeintos1.....");  
   agent.context.set({ name: 'set_mesa_aplicativo', lifespan: 1, parameters: {} });
   agent.context.set({ name: 'set_menu', lifespan: 1, parameters: {} });
   agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });
@@ -21,24 +20,35 @@ function mesa_aplicativo(agent) {
 }
 
 function lista_aplicativos(){    
-    let list_opc = [];
+    let aplicaciones = [];
     let opciones=[];
-    opciones.push([{"text": "APPENS","callback_data":"APPENS"}]);
-    opciones.push([{"text": "STD","callback_data":"STD"}]);
-    opciones.push([{"text": "NSP","callback_data":"NSP"}]);
-    opciones.push([{"text": "NSTD","callback_data":"NSTD"}]);
-    opciones.push([{"text": "SAA","callback_data":"SAA"}]);
-    opciones.push([{"text": "APJ","callback_data":"APJ"}]);
-    opciones.push([{"text": "NSBR","callback_data":"NSBR"}]);
-    opciones.push([{"text": "SIGA","callback_data":"SIGA"}]);
-    opciones.push([{"text": "REFLEX","callback_data":"REFLEX"}]);
-    opciones.push([{"text": "MCCIA","callback_data":"MCCIA"}]);
-    opciones.push([{"text": "SGCP","callback_data":"SGCP"}]);
-    opciones.push([{"text": "SIAF","callback_data":"SIAF"}]);
-    opciones.push([{"text": "SPIJ","callback_data":"SPIJ"}]);
-    opciones.push([{"text": "RCPJ","callback_data":"RCPJ"}]);
-    opciones.push([{"text": "NSGA","callback_data":"NSGA"}]);
-    opciones.push([{"text": "OTROS","callback_data":"Otros"}]);
+    aplicaciones.push({"text": "APPENS","callback_data":"APPENS"});
+    aplicaciones.push({"text": "STD","callback_data":"STD"});
+    aplicaciones.push({"text": "NSP","callback_data":"NSP"});
+    aplicaciones.push({"text": "NSTD","callback_data":"NSTD"});    
+    opciones.push(aplicaciones);
+    aplicaciones = [];
+    aplicaciones.push({"text": "SAA","callback_data":"SAA"});
+    aplicaciones.push({"text": "APJ","callback_data":"APJ"});
+    aplicaciones.push({"text": "NSBR","callback_data":"NSBR"});
+    aplicaciones.push({"text": "SIGA","callback_data":"SIGA"}); 
+    opciones.push(aplicaciones);
+    aplicaciones = [];
+    aplicaciones.push({"text": "REFLEX","callback_data":"REFLEX"});
+    aplicaciones.push({"text": "MCCIA","callback_data":"MCCIA"});
+    aplicaciones.push({"text": "SGCP","callback_data":"SGCP"});
+    aplicaciones.push({"text": "SIAF","callback_data":"SIAF"}); 
+    opciones.push(aplicaciones);
+    aplicaciones = [];
+    aplicaciones.push({"text": "SPIJ","callback_data":"SPIJ"});
+    aplicaciones.push({"text": "RCPJ","callback_data":"RCPJ"});
+    aplicaciones.push({"text": "NSGA","callback_data":"NSGA"});
+    aplicaciones.push({"text": "OTROS","callback_data":"Otros"}); 
+    opciones.push(aplicaciones);
+    aplicaciones = [];
+
+    opciones.push([{"text": "Regresar al menú principal","callback_data": "menu"}]);
+    opciones.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
     const payload = {
       "telegram": {
           "text": '<b>¡Seleccione una opción:',
@@ -47,9 +57,8 @@ function lista_aplicativos(){
           },
           "parse_mode": "HTML"
         }
-      }
-    list_opc.push(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));
-    return list_opc;
+      };
+    return payload;
 }
 
 module.exports = {
