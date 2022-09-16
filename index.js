@@ -282,7 +282,7 @@ app.post('/webhook', (req, res) => {
 
 //Mesa de ayuda
   intentMap.set('Mesa menu', mesa_menu);
-  intentMap.set('Appens menu', appens_menu);
+  //intentMap.set('Appens menu', appens_menu);
  // intentMap.set('Mesa aplicativo', mesa_aplicativo);
 
   
