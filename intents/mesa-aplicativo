@@ -15,8 +15,8 @@ function mesa_menu(agent) {
 function mesa_appens_menu(agent){
   //let item = agent.parameters.boteta_fec_emision;
   let aplicaciones = [];
-  aplicaciones.push({"text": "Lentitud en APPENS","callback_data":"APPENS_LENTITUD"},{"text": "Mover Token","callback_data":"APPENS_TOKEN"});
-  aplicaciones.push({"text": "Reasignar documentos","callback_data":"APPENS_DOCU"},{"text": "Reemplazar documentos","callback_data":"APPENS_REEM"});
+  aplicaciones.push([{"text": "Lentitud en APPENS","callback_data":"APPENS_LENTITUD"},{"text": "Mover Token","callback_data":"APPENS_TOKEN"}]);
+  aplicaciones.push([{"text": "Reasignar documentos","callback_data":"APPENS_DOCU"},{"text": "Reemplazar documentos","callback_data":"APPENS_REEM"}]);
   aplicaciones.push([{"text": "Inoperar solicitudes","callback_data":"APPENS_INOP"}]);    
   aplicaciones.push([{"text": "Regresar al menú principal","callback_data": "menu"}]);
   aplicaciones.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
