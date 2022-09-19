@@ -37,15 +37,15 @@ function payload_opciones(){
     const cronograma_mes=agent.parameters.cronograma_mes;  
     let opciones = payload_opciones();
     let list_opc = [];
-    list_opc.push('🗓<u><b>Cronograma de pagos '+cronograma_mes+' '+ d.getFullYear()+':</b></u>\n'); 
+    list_opc.push('🗓<u><b>Cronograma de pagos '+cronograma_mes+' '+ d.getFullYear()+':</b></u>'); 
 
     for (const cron of v_cronograma) { 
       if(cronograma_mes == cron.mes_desc){
-        list_opc.push("\n<i><b>"+cron.tipo_1+"</b></i>\n"+cron.tipo_1_desc);
-        list_opc.push("\n<i><b>"+cron.tipo_2+"</b></i>\n"+cron.tipo_2_desc);
-        list_opc.push("\n<i><b>"+cron.tipo_3+"</b></i>\n"+cron.tipo_3_desc);
-        list_opc.push("\n<i><b>"+cron.tipo_4+"</b></i>\n"+cron.tipo_4_desc);
-        list_opc.push("\n<i><b>"+cron.tipo_5+"</b></i>\n"+cron.tipo_5_desc);
+        list_opc.push("<i><b>"+cron.tipo_1+"</b></i>\n"+cron.tipo_1_desc);
+        list_opc.push("<i><b>"+cron.tipo_2+"</b></i>\n"+cron.tipo_2_desc);
+        list_opc.push("<i><b>"+cron.tipo_3+"</b></i>\n"+cron.tipo_3_desc);
+        list_opc.push("<i><b>"+cron.tipo_4+"</b></i>\n"+cron.tipo_4_desc);
+        list_opc.push("<i><b>"+cron.tipo_5+"</b></i>\n"+cron.tipo_5_desc);
       }       
     }           
     const payload = {"telegram": {"text": "Por favor selecciona una opción 👇",
@@ -53,7 +53,7 @@ function payload_opciones(){
                         "inline_keyboard": opciones
                         },
                       "parse_mode": "HTML"}};                  
-    list_opc(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));
+    list_opc.push(new Payload(agent.UNSPECIFIED , payload, {rawPayload: true, sendAsMessage: true}));
     
     
     agent.add(list_opc);   
