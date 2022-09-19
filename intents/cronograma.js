@@ -15,16 +15,16 @@ function cronograma_info(agent){
   list_opc.push('🗓<u><b>Cronograma de pagos '+cronograma_mes+' '+ d.getFullYear()+':</b></u>'); 
   for (const cron of v_cronograma) { 
     if(cronograma_mes == cron.mes_desc){
-      list_opc.push(new Payload(agent.UNSPECIFIED,set_payload("<i><b>"+cron.tipo_1+"</b></i>\n"+cron.tipo_1_desc,[]),{rawPayload: true, sendAsMessage: true}));
-      list_opc.push(new Payload(agent.UNSPECIFIED,set_payload("<i><b>"+cron.tipo_1+"</b></i>\n"+cron.tipo_1_desc,[]),{rawPayload: true, sendAsMessage: true}));
-      list_opc.push(new Payload(agent.UNSPECIFIED,set_payload("<i><b>"+cron.tipo_2+"</b></i>\n"+cron.tipo_2_desc,[]),{rawPayload: true, sendAsMessage: true}));
-      list_opc.push(new Payload(agent.UNSPECIFIED,set_payload("<i><b>"+cron.tipo_3+"</b></i>\n"+cron.tipo_3_desc,[]),{rawPayload: true, sendAsMessage: true}));
-      list_opc.push(new Payload(agent.UNSPECIFIED,set_payload("<i><b>"+cron.tipo_4+"</b></i>\n"+cron.tipo_4_desc,[]),{rawPayload: true, sendAsMessage: true}));
-      list_opc.push(new Payload(agent.UNSPECIFIED,set_payload("<i><b>"+cron.tipo_5+"</b></i>\n"+cron.tipo_5_desc,[]),{rawPayload: true, sendAsMessage: true}));
+      list_opc.push(Payload(agent.UNSPECIFIED,set_payload("<i><b>"+cron.tipo_1+"</b></i>\n"+cron.tipo_1_desc,[]),{rawPayload: true, sendAsMessage: true}));
+      list_opc.push(Payload(agent.UNSPECIFIED,set_payload("<i><b>"+cron.tipo_1+"</b></i>\n"+cron.tipo_1_desc,[]),{rawPayload: true, sendAsMessage: true}));
+      list_opc.push(Payload(agent.UNSPECIFIED,set_payload("<i><b>"+cron.tipo_2+"</b></i>\n"+cron.tipo_2_desc,[]),{rawPayload: true, sendAsMessage: true}));
+      list_opc.push(Payload(agent.UNSPECIFIED,set_payload("<i><b>"+cron.tipo_3+"</b></i>\n"+cron.tipo_3_desc,[]),{rawPayload: true, sendAsMessage: true}));
+      list_opc.push(Payload(agent.UNSPECIFIED,set_payload("<i><b>"+cron.tipo_4+"</b></i>\n"+cron.tipo_4_desc,[]),{rawPayload: true, sendAsMessage: true}));
+      list_opc.push(Payload(agent.UNSPECIFIED,set_payload("<i><b>"+cron.tipo_5+"</b></i>\n"+cron.tipo_5_desc,[]),{rawPayload: true, sendAsMessage: true}));
     }       
   }   
   let texto = "Por favor selecciona una opción 👇";        
-  list_opc.push(new Payload(agent.UNSPECIFIED,set_payload(texto,set_payload_opciones()),{rawPayload: true, sendAsMessage: true}));  
+  list_opc.push(Payload(agent.UNSPECIFIED,set_payload(texto,set_payload_opciones()),{rawPayload: true, sendAsMessage: true}));  
   agent.add(list_opc);     
 };
   
