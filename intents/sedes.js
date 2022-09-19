@@ -61,7 +61,7 @@ function sedes_horarios_info(agent) {
     let list_opc = [];
     //agent.add(`¡Conoce nuestras sedes en ${sede_region}!`); 
     
-    //list_opc.push(new Text(`¡Conoce nuestras sedes en ${sede_region}!`)); 
+    list_opc.push(`¡Conoce nuestras sedes en ${sede_region}!`); 
     for (const sede of v_sedes) {   
       if((sede_region.toUpperCase() == (sede.region).toUpperCase()) || 
          (sede_region.toUpperCase() == 'LIMA METROPOLITANA' && (sede.provincia).toUpperCase()== 'LIMA') ||
@@ -112,6 +112,7 @@ function sedes_horarios_info(agent) {
       })
     );*/
     
+    list_opc.push(`¡....Conoce nuestras sedes en ${sede_region}!`); 
     agent.context.set({ name: 'set_menu', lifespan: 1, parameters: {}});
     agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });
 
