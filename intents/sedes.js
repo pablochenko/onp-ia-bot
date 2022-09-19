@@ -102,7 +102,7 @@ function sedes_horarios_info(agent) {
         }
       }
     list_opc.push(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));
-    agent.add(list_opc);
+    
 
     /*agent.add(new Card({
         title: '¡Gracias por usar nuestros canales digitales!',
@@ -113,6 +113,7 @@ function sedes_horarios_info(agent) {
     );*/
     
     list_opc.push(`¡....Conoce nuestras sedes en ${sede_region}!`); 
+    agent.add(list_opc);
     agent.context.set({ name: 'set_menu', lifespan: 1, parameters: {}});
     agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });
 
@@ -122,4 +123,4 @@ function sedes_horarios_info(agent) {
   module.exports = {
     sedes_horarios,
     sedes_horarios_info
-}
+  }
