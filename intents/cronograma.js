@@ -22,7 +22,7 @@ function cronograma_info(agent){
       list_opc.push(new Card({title:cron.tipo_5, text:cron.tipo_5_desc}));
     }       
   }   
-  let texto = "Para realizar una nueva consulta, selecciona una opción.👇";        
+  let texto = "Realiza una nueva consulta seleccionando una opción:👇";        
   list_opc.push(new Payload('TELEGRAM',set_payload(texto,set_payload_opciones()),{rawPayload: true, sendAsMessage: true}));  
   agent.add(list_opc);     
 };

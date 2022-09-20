@@ -88,7 +88,7 @@ function sedes_horarios_info(agent) {
          (sede_region.toUpperCase() == 'CALLAO' && (sede.ubigeo.departamento).toUpperCase()== 'PROV.CONST.CALLAO')){
         let direccion = sede.direccion +'\n'+ sede.ubigeo.departamento +'-'+sede.ubigeo.provincia+'-'+sede.ubigeo.distrito;        
         let horario = 'Horario de atención: '+sede.horarioLv;
-        let mapa = `https://maps.google.com/maps?daddr=${sede.latitud},${sede.longitud}=`;
+        let mapa = 'https://maps.google.com/maps?daddr='+sede.latitud+','+sede.longitud+'=';
         let imagen = sede.foto;
         list_opc.push(new Card({
           title: sede.tipoCentroAtencion.tipoCentroAtencion + ' - '+ sede.centroAtencion,
@@ -102,34 +102,19 @@ function sedes_horarios_info(agent) {
     let opciones=[];
     opciones.push([{"text": "Regresar al menú principal","callback_data": "menu"}]);
     opciones.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
-
-    const payload = {
-      "telegram": {
-          "text": 'texto',
-          "reply_markup": {
-            "inline_keyboard": opciones
-          },
-          "parse_mode": "HTML"
-        }
-      }
-    list_opc.push(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));
-    
-
-    /*agent.add(new Card({
-        title: '¡Gracias por usar nuestros canales digitales!',
-        text: 'Selecciona la siguiene opción para retornar al menú principal ',
-        buttonText: 'Menú principal',
-        buttonUrl: 'menu'
-      })
-    );*/
-    
-    list_opc.push(`¡....Conoce nuestras sedes en ${sede_region}!`); 
+    const payload = {"telegram": {          
+                        "text": "Realiza una nueva consulta seleccionando una opción:👇",
+                        "reply_markup": {
+                          "inline_keyboard": opciones
+                        },
+                        "parse_mode": "HTML"
+                      }
+                    }
+    list_opc.push(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));       
     agent.add(list_opc);
     agent.context.set({ name: 'set_menu', lifespan: 1, parameters: {}});
     agent.context.set({ name: 'set_finalizar', lifespan: 1, parameters: {} });
-
   }
-
 
   module.exports = {
     sedes_horarios,
