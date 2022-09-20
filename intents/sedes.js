@@ -55,7 +55,7 @@ function payload_opciones(){
 
 
 function sedes_horarios_info(agent) {         
-    const sede_region=agent.parameters.sede_region;  
+    const sede_region=agent.parameters.sede_reg;  
     let list_opc = [];
     list_opc.push(`¡Conoce nuestras sedes en ${sede_region}!`); 
     for (const sede of v_sedes_horarios) {   
@@ -64,14 +64,14 @@ function sedes_horarios_info(agent) {
          (sede_region.toUpperCase() == 'LIMA PROVINCIA' && (sede.ubigeo.departamento).toUpperCase()== 'LIMA'&& (sede.ubigeo.provincia).toUpperCase()!= 'LIMA') || 
          (sede_region.toUpperCase() == 'CALLAO' && (sede.ubigeo.departamento).toUpperCase()== 'PROV.CONST.CALLAO')){
         let direccion = sede.direccion +'\n'+ sede.ubigeo.departamento +'-'+sede.ubigeo.provincia+'-'+sede.ubigeo.distrito;        
-        let horario = '\nHorario de atención: '+sede.horarioLv + ' ' + sede.horarioSd;
+        let horario = '\n🕑Horario de atención: '+sede.horarioLv + ' ' + sede.horarioSd;
         let mapa = 'https://maps.google.com/maps?daddr='+sede.latitud+','+sede.longitud+'=';
         let imagen = sede.foto;
         list_opc.push(new Card({
           title: sede.tipoCentroAtencion.tipoCentroAtencion + ' - '+ sede.centroAtencion,
           text: direccion+horario,
           imageUrl: imagen,
-          buttonText: 'Ver en Maps',
+          buttonText: '🌎 Ver en Maps',
           buttonUrl: mapa
         }));
       }      
