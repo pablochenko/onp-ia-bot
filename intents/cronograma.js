@@ -1,4 +1,4 @@
-const { Card, Suggestion, Payload } = require('dialogflow-fulfillment');
+const { Card, Suggestion, Payload,Text } = require('dialogflow-fulfillment');
 const v_cronograma = require('../json/cronograma.json'); 
 const d = new Date();
 /*----------------------------CRONOGRAMA----------------------------------------*/
