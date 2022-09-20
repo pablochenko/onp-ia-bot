@@ -14,7 +14,7 @@ function cronograma_info(agent){
   let list_opc = [];
   list_opc.push(new Text('🗓Cronograma de pagos '+cronograma_mes+' '+ d.getFullYear()+':')); 
 
-
+/*
   const text = `Estimado(a) asegurado(a), para acceder a tu cuenta necesitamos validar tu identidad.🕵️‍♂️\nPor favor, selecciona tu tipo de documento:`;
   const inline_keyboard = [    [
       { "text": "DNI", "callback_data": "DNI" },
@@ -31,12 +31,12 @@ function cronograma_info(agent){
     }
   };
   list_opc.push(new Payload('TELEGRAM', payload, { rawPayload: true, sendAsMessage: true }));
+*/
 
 
-
-  /*
+  
   let texto = "Por favor selecciona una opción 👇";        
-  list_opc.push(new Payload(agent.UNSPECIFIED,set_payload(texto,set_payload_opciones()),{rawPayload: true, sendAsMessage: true}));  
+  list_opc.push(new Payload('TELEGRAM',set_payload(texto,set_payload_opciones()),{rawPayload: true, sendAsMessage: true}));  
 
   for (const cron of v_cronograma) { 
     if(cronograma_mes == cron.mes_desc){
@@ -46,7 +46,7 @@ function cronograma_info(agent){
       list_opc.push(new Card({title:cron.tipo_4, text:cron.tipo_4_desc}));
       list_opc.push(new Card({title:cron.tipo_5, text:cron.tipo_5_desc}));
     }       
-  }   */
+  }   
 
   agent.add(list_opc);     
 };
