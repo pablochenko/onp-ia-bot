@@ -1,6 +1,4 @@
 const { Card, Suggestion, Payload,Text } = require('dialogflow-fulfillment');
-
-const v_sedes = require('../json/sedes.json'); 
 const v_sedes_horarios = require('../json/sedes_horarios.json'); 
 const v_departamentos = require('../json/departamentos.json'); 
 
