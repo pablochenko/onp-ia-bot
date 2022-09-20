@@ -86,10 +86,12 @@ function sedes_horarios_info(agent) {
                         }));
       }      
     } 
+    let texto_menu = '';
     if(contador==0){
       list_opc = [];
-      list_opc.push(`😰 Por el momento no contamos con sedes en ${sede_region}, sin embargo, nos puedes contactar a nuestra central telefónica 📞<a href='(01) 634 2222'>(01) 634 2222</a>`); 
+      texto_menu =`😰 Por el momento no contamos con sedes en ${sede_region}.\nContactate con nosotros al 📞<a href='(01) 634 2222'>(01) 634 2222</a>\n`; 
     }
+    texto_menu += "Realiza una nueva consulta seleccionando una opción:👇";
     let opciones = payload_opciones();
     const payload = {"telegram": {          
                         "text": "Realiza una nueva consulta seleccionando una opción:👇",
