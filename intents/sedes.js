@@ -32,7 +32,7 @@ function payload_opciones(){
   let opciones = [];
   let departamentos = [];
   departamentos.push({"text": "LIMA METROPOLITANA","callback_data": "LIMA METROPOLITANA"});
-  departamentos.push({"text": "LIMA PROVINCIAS","callback_data": "LIMA PROVINCIAS"});
+  departamentos.push({"text": "LIMA PROVINCIA","callback_data": "LIMA PROVINCIA"});
   opciones.push(departamentos);
   departamentos = [];  
   departamentos.push({"text": "CALLAO","callback_data": "CALLAO"});
