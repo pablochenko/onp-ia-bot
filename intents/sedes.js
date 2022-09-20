@@ -89,8 +89,6 @@ function sedes_horarios_info(agent) {
     let texto_menu = '';
     if(contador==0){
       list_opc = [];
-      
-      text = `Por favor genere un ticket de atención.👉 <a href='${url_aranda}'>Clic aqui</a>`;  
       let tel = "016342222";
       texto_menu =`😰 Por el momento no contamos con sedes en ${sede_region}.\nContactate con nosotros al 📞 <a href='${tel}'>(01) 634 2222</a> \n`; 
     }
