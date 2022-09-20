@@ -1,4 +1,4 @@
-const { Card, Suggestion, Payload } = require('dialogflow-fulfillment');
+const { Card, Suggestion, Payload,Text } = require('dialogflow-fulfillment');
 
 const v_sedes = require('../json/sedes.json'); 
 const v_sedes_horarios = require('../json/sedes_horarios.json'); 
@@ -61,7 +61,7 @@ function sedes_horarios_info(agent) {
     let list_opc = [];
     //agent.add(`¡Conoce nuestras sedes en ${sede_region}!`); 
     
-    list_opc.push(`¡Conoce nuestras sedes en ${sede_region}!`); 
+    list_opc.push(`¡Conoce nuestras sedes en ${sede_region}!`); /*
     for (const sede of v_sedes) {   
       if((sede_region.toUpperCase() == (sede.region).toUpperCase()) || 
          (sede_region.toUpperCase() == 'LIMA METROPOLITANA' && (sede.provincia).toUpperCase()== 'LIMA') ||
@@ -78,16 +78,27 @@ function sedes_horarios_info(agent) {
           buttonText: 'Ver en Maps',
           buttonUrl: mapa
         }));
-        /*agent.add(new Card({
-            title: sede.tipo + ' - '+ sede.descripcion,
-            text: direccion+horario,
-            imageUrl: imagen,
-            buttonText: 'Ver en Maps',
-            buttonUrl: mapa
-          })
-        );*/
       }      
-    }     
+    }    */
+
+    for (const sede of v_sedes_horarios) {   
+      if((sede_region.toUpperCase() == (sede.ubigeo.departamento).toUpperCase()) || 
+         (sede_region.toUpperCase() == 'LIMA METROPOLITANA' && (sede.ubigeo.provincia).toUpperCase()== 'LIMA') ||
+         (sede_region.toUpperCase() == 'LIMA PROVINCIA' && (sede.ubigeo.departamento).toUpperCase()== 'LIMA'&& (sede.ubigeo.provincia).toUpperCase()!= 'LIMA') || 
+         (sede_region.toUpperCase() == 'CALLAO' && (sede.ubigeo.departamento).toUpperCase()== 'PROV.CONST.CALLAO')){
+        let direccion = sede.direccion +'\n'+ sede.ubigeo.departamento +'-'+sede.ubigeo.provincia+'-'+sede.ubigeo.distrito;        
+        let horario = 'Horario de atención: '+sede.horarioLv;
+        let mapa = `https://maps.google.com/maps?daddr=${sede.latitud},${sede.longitud}=`;
+        let imagen = sede.foto;
+        list_opc.push(new Card({
+          title: sede.tipoCentroAtencion.tipoCentroAtencion + ' - '+ sede.centroAtencion,
+          text: direccion+horario,
+          imageUrl: imagen,
+          buttonText: 'Ver en Maps',
+          buttonUrl: mapa
+        }));
+      }      
+    } 
     let opciones=[];
     opciones.push([{"text": "Regresar al menú principal","callback_data": "menu"}]);
     opciones.push([{"text": "Finalizar conversación","callback_data": "finalizar"}]);
