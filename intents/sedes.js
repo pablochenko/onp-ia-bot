@@ -31,8 +31,8 @@ function payload_opciones(){
   });
   let opciones = [];
   let departamentos = [];
-  departamentos.push({"text": "LIMA METROPOLITANA","callback_data": "LIMA_METROP"});
-  departamentos.push({"text": "LIMA PROVINCIAS","callback_data": "LIMA_PROV"});
+  departamentos.push({"text": "LIMA METROPOLITANA","callback_data": "LIMA METROPOLITANA"});
+  departamentos.push({"text": "LIMA PROVINCIAS","callback_data": "LIMA PROVINCIAS"});
   opciones.push(departamentos);
   departamentos = [];  
   departamentos.push({"text": "CALLAO","callback_data": "CALLAO"});
@@ -94,7 +94,7 @@ function sedes_horarios_info(agent) {
     texto_menu += "Realiza una nueva consulta seleccionando una opción:👇";
     let opciones = payload_opciones();
     const payload = {"telegram": {          
-                        "text": "Realiza una nueva consulta seleccionando una opción:👇",
+                        "text": texto_menu,
                         "reply_markup": {
                           "inline_keyboard": opciones
                         },
