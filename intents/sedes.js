@@ -58,24 +58,38 @@ function sedes_horarios_info(agent) {
     const sede_region=agent.parameters.sede_reg;  
     let list_opc = [];
     list_opc.push(`¡Conoce nuestras sedes en ${sede_region}!`); 
+    let contador = 0;
     for (const sede of v_sedes_horarios) {   
       if((sede_region.toUpperCase() == (sede.ubigeo.departamento).toUpperCase()) || 
          (sede_region.toUpperCase() == 'LIMA METROPOLITANA' && (sede.ubigeo.provincia).toUpperCase()== 'LIMA') ||
          (sede_region.toUpperCase() == 'LIMA PROVINCIA' && (sede.ubigeo.departamento).toUpperCase()== 'LIMA'&& (sede.ubigeo.provincia).toUpperCase()!= 'LIMA') || 
          (sede_region.toUpperCase() == 'CALLAO' && (sede.ubigeo.departamento).toUpperCase()== 'PROV.CONST.CALLAO')){
-        let direccion = sede.direccion +'\n'+ sede.ubigeo.departamento +'-'+sede.ubigeo.provincia+'-'+sede.ubigeo.distrito;        
-        let horario = '\n🕑Horario de atención: '+sede.horarioLv + ' ' + sede.horarioSd;
-        let mapa = 'https://maps.google.com/maps?daddr='+sede.latitud+','+sede.longitud+'=';
+        contador++;
+        let titulo='';
+        if(sede.tipoCentroAtencion.idTipoCentroAtencion == 1){
+          titulo = `🏬${sede.tipoCentroAtencion.tipoCentroAtencion} - ${sede.centroAtencion}`;
+        }else if(sede.tipoCentroAtencion.idTipoCentroAtencion == 2){
+          titulo = `🤝${sede.tipoCentroAtencion.tipoCentroAtencion} - ${sede.centroAtencion}`;
+        }else if(sede.tipoCentroAtencion.idTipoCentroAtencion == 3){
+          titulo = `📍${sede.tipoCentroAtencion.tipoCentroAtencion} - ${sede.centroAtencion}`;
+        }
+        let direccion = `${sede.direccion}\n${sede.ubigeo.departamento}-${sede.ubigeo.provincia}-${sede.ubigeo.distrito}`;        
+        let horario = `🕑 ${sede.horarioLv}`;
         let imagen = sede.foto;
+        let mapa = `https://maps.google.com/maps?daddr=${sede.latitud},${sede.longitud}`;
         list_opc.push(new Card({
-          title: sede.tipoCentroAtencion.tipoCentroAtencion + ' - '+ sede.centroAtencion,
-          text: direccion+horario,
-          imageUrl: imagen,
-          buttonText: '🌎 Ver en Maps',
-          buttonUrl: mapa
-        }));
+                          title: titulo,
+                          text: `${direccion}\n${horario}`,
+                          imageUrl: imagen,
+                          buttonText: `🌎 Ver en Maps`,
+                          buttonUrl: mapa
+                        }));
       }      
     } 
+    if(contador==0){
+      list_opc = [];
+      list_opc.push(`😰 Por el momento no contamos con sedes en ${sede_region}, sin embargo, nos puedes contactar a nuestra central telefónica 📞<a href='(01) 634 2222'>(01) 634 2222</a>`); 
+    }
     let opciones = payload_opciones();
     const payload = {"telegram": {          
                         "text": "Realiza una nueva consulta seleccionando una opción:👇",
