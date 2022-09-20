@@ -30,7 +30,7 @@ function cronograma_info(agent){
       "parse_mode": "HTML"
     }
   };
-  list_opc.push(new Payload(agent.UNSPECIFIED, payload, { rawPayload: true, sendAsMessage: true }));
+  list_opc.push(Payload(agent.UNSPECIFIED, payload, { rawPayload: true, sendAsMessage: true }));
 
 
 
