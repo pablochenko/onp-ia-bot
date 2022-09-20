@@ -12,13 +12,13 @@ function cronograma(agent){
 function cronograma_info(agent){        
   const cronograma_mes=agent.parameters.cronograma_mes;  
   let list_opc = [];
-  list_opc.push('🗓Cronograma de pagos '+cronograma_mes+' '+ d.getFullYear()+':'); 
+  list_opc.push(Text('🗓Cronograma de pagos '+cronograma_mes+' '+ d.getFullYear()+':')); 
 
 
   const text = `Estimado(a) asegurado(a), para acceder a tu cuenta necesitamos validar tu identidad.🕵️‍♂️\nPor favor, selecciona tu tipo de documento:`;
   const inline_keyboard = [    [
       { "text": "DNI", "callback_data": "DNI" },
-      { "text": "CE", "callback_data": "CE" },
+      { "text": "CE", "callback_data": "CE" }
     ]
   ];
   const payload = {
