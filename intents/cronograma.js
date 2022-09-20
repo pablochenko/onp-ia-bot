@@ -12,7 +12,7 @@ function cronograma(agent){
 function cronograma_info(agent){        
   const cronograma_mes=agent.parameters.cronograma_mes;  
   let list_opc = [];
-  //list_opc.push(new Text('🗓Cronograma de pagos '+cronograma_mes+' '+ d.getFullYear()+':')); 
+  list_opc.push(new Text('🗓Cronograma de pagos '+cronograma_mes+' '+ d.getFullYear()+':')); 
 
 
   const text = `Estimado(a) asegurado(a), para acceder a tu cuenta necesitamos validar tu identidad.🕵️‍♂️\nPor favor, selecciona tu tipo de documento:`;
