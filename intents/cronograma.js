@@ -35,9 +35,7 @@ function cronograma_info(agent){
 
 
   
-  let texto = "Por favor selecciona una opción 👇";        
-  list_opc.push(new Payload('TELEGRAM',set_payload(texto,set_payload_opciones()),{rawPayload: true, sendAsMessage: true}));  
-
+  
   for (const cron of v_cronograma) { 
     if(cronograma_mes == cron.mes_desc){
       list_opc.push(new Card({title:cron.tipo_1, text:cron.tipo_1_desc}));
@@ -47,6 +45,8 @@ function cronograma_info(agent){
       list_opc.push(new Card({title:cron.tipo_5, text:cron.tipo_5_desc}));
     }       
   }   
+  let texto = "Por favor selecciona una opción 👇";        
+  list_opc.push(new Payload('TELEGRAM',set_payload(texto,set_payload_opciones()),{rawPayload: true, sendAsMessage: true}));  
 
   agent.add(list_opc);     
 };
