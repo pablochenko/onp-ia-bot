@@ -13,29 +13,6 @@ function cronograma_info(agent){
   const cronograma_mes=agent.parameters.cronograma_mes;  
   let list_opc = [];
   list_opc.push(new Text('🗓Cronograma de pagos '+cronograma_mes+' '+ d.getFullYear()+':')); 
-
-/*
-  const text = `Estimado(a) asegurado(a), para acceder a tu cuenta necesitamos validar tu identidad.🕵️‍♂️\nPor favor, selecciona tu tipo de documento:`;
-  const inline_keyboard = [    [
-      { "text": "DNI", "callback_data": "DNI" },
-      { "text": "CE", "callback_data": "CE" }
-    ]
-  ];
-  const payload = {
-    "telegram": {
-      "text": text,
-      "reply_markup": {
-        "inline_keyboard": inline_keyboard
-      },
-      "parse_mode": "HTML"
-    }
-  };
-  list_opc.push(new Payload('TELEGRAM', payload, { rawPayload: true, sendAsMessage: true }));
-*/
-
-
-  
-  
   for (const cron of v_cronograma) { 
     if(cronograma_mes == cron.mes_desc){
       list_opc.push(new Card({title:cron.tipo_1, text:cron.tipo_1_desc}));
@@ -45,9 +22,8 @@ function cronograma_info(agent){
       list_opc.push(new Card({title:cron.tipo_5, text:cron.tipo_5_desc}));
     }       
   }   
-  let texto = "Por favor selecciona una opción 👇";        
+  let texto = "si deseas realizar una nueva consulta, selecciona una opción.👇";        
   list_opc.push(new Payload('TELEGRAM',set_payload(texto,set_payload_opciones()),{rawPayload: true, sendAsMessage: true}));  
-
   agent.add(list_opc);     
 };
   
