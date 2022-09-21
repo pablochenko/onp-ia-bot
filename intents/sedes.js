@@ -2,7 +2,7 @@ const { Card, Suggestion, Payload,Text } = require('dialogflow-fulfillment');
 const v_sedes_horarios = require('../json/sedes_horarios.json'); 
 const v_departamentos = require('../json/departamentos.json'); 
 
-function sedes_horarios(agent) {     
+function sedes_horarios(agent) { 
   let texto = '<b>¡Sedes y horarios de atención!</b>\nPor favor selecciona la región que deseas consultar';  
   let opciones = payload_opciones();
   const payload = {
@@ -54,7 +54,9 @@ function payload_opciones(){
 }
 
 
-function sedes_horarios_info(agent) {         
+function sedes_horarios_info(agent) {          
+  const ubicacion=agent.parameters.ubicacion;  
+  console.log(ubicacion);  
     const sede_region=agent.parameters.sede_reg;  
     let list_opc = [];
     list_opc.push(`¡Conoce nuestras sedes en ${sede_region}!`); 
@@ -81,7 +83,7 @@ function sedes_horarios_info(agent) {
                           title: titulo,
                           text: `${direccion}\n${horario}`,
                           imageUrl: imagen,
-                          buttonText: `🌎 Ver en Maps`,
+                          buttonText: `Ver en Maps 🌎`,
                           buttonUrl: mapa
                         }));
       }      

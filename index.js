@@ -120,7 +120,7 @@ function cierra_sesion(agent){
 
 }
 function menu_principal(agent) {
-  let texto = `Estimado(a) asegurado(a), estos son los servicios disponibles mediante este canal.🤝\nHas clic sobre el servicio que deseas acceder:`;  
+  let texto = `Estimado(a) asegurado(a), estos son los servicios disponibles mediante este canal.🤝\nSelecciona el servicio que desees consultar:`;  
   const payload = {
         "telegram": {
             "text": texto,
