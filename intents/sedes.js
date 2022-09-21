@@ -55,9 +55,10 @@ function payload_opciones(){
 
 
 function sedes_horarios_info(agent) {          
-  const ubicacion=agent.parameters.ubicacion;  
-  console.log(ubicacion);  
+  //const ubicacion=agent.parameters.ubicacion;  
+  //console.log(ubicacion);  
     const sede_region=agent.parameters.sede_reg;  
+    console.log(sede_region);  
     let list_opc = [];
     list_opc.push(`¡Conoce nuestras sedes en ${sede_region}!`); 
     let contador = 0;
