@@ -24,8 +24,8 @@ function handleIntentClaveVirtual(agent) {
 
 function handleIntentClaveVirtualDatos(agent) {
   const parametros = {
-    'per_num_doc': agent.parameters.per_tipo_doc,
-    'per_tipo_doc': agent.parameters.per_num_doc,
+    'per_tipo_doc': agent.parameters.per_tipo_doc,
+    'per_num_doc': agent.parameters.per_num_doc,
     'per_fec_emision': agent.parameters.per_fec_emision
   };
   let texto = `Selecciona una opción para validar tu identidad:`;  
