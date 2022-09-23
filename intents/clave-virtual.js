@@ -3,17 +3,14 @@ const { Card, Suggestion, Payload } = require('dialogflow-fulfillment');
 const {getValidDni,getConsultarUserExiste,getValidOlvideClave,getEnviarCorreo} = require('../controllers/clave-virtual');
 
 function handleIntentClaveVirtual(agent) {
-    
-    console.log('handleIntentClaveVirtual');
-
-     let texto = `<b>¡Solicita o recupera tu Clave Virtual!🔐</b>\nCon clave virtual puedes acceder a tus servicios de manera rápida y segura.🤝`;  
+    let texto = `<b>¡Solicita o recupera tu Clave Virtual!🔐</b>\nCon clave virtual puedes acceder a tus servicios de manera rápida y segura.🤝`;  
     const payload = {
           "telegram": {
               "text": texto,
               "parse_mode": "HTML",
               "reply_markup": {
                 "inline_keyboard": [
-                  [{"text": "Solicitar mi Clave Virtual", "callback_data": "solicitar_clave"}],
+                  [{"text": "Solicitar mi Clave Virtual", "callback_data": "clave_crear"}],
                   [{ "text": "Recuperar mi Clave Virtual", "callback_data": "recuperar_clave" }],
                   [{ "text": "Regresar al menú principal", "callback_data": "menu" }],
                   [{ "text": "Finalizar conversación", "callback_data": "finalizar" }]
@@ -24,6 +21,14 @@ function handleIntentClaveVirtual(agent) {
     agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true})); 
  
   }
+
+function  handleIntentClaveVirtualCrear(agent) {
+  agent.add("Para solicitar tu clave debes enviarme tu correo...");  
+
+}
+
+
+
 
   function handleIntentClaveVirtualRecuperar(agent) {
 
@@ -117,4 +122,4 @@ solicite su 🔐 clave virtual en la opción de "Solicitar Clave Virtual"`;
 
   
 
-  module.exports = {handleIntentClaveVirtual,handleIntentClaveVirtualRecuperar,handleIntentClaveVirtualValidUser};
+  module.exports = {handleIntentClaveVirtual,handleIntentClaveVirtualCrear,handleIntentClaveVirtualRecuperar,handleIntentClaveVirtualValidUser};
