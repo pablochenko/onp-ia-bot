@@ -34,8 +34,8 @@ function handleIntentClaveVirtualDatos(agent) {
             "text": texto,
             "parse_mode": "HTML",
             "reply_markup": {
-              "inline_keyboard": [[{ "text": "Validar con el nombre de mi <b>Padre</b>", "callback_data": "padre" },
-                                    { "text": "Validar con el nombre de mi <b>Madre</b>", "callback_data": "madre" } ]]
+              "inline_keyboard": [[{ "text": "Validar con el nombre de mi Padre", "callback_data": "padre" }],
+                                  [{ "text": "Validar con el nombre de mi Madre", "callback_data": "madre" } ]]
             }
           }
         };
