@@ -19,7 +19,7 @@ function handleIntentClaveVirtual(agent) {
             }
           };
     agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));  
-    agent.context.set({ name: 'set_clave_datos', lifespan: 1, parameters: [] });
+    agent.context.set({ name: 'set_clave_datos', lifespan: 1, parameters: {} });
   }
 
 function handleIntentClaveVirtualDatos(agent) {
