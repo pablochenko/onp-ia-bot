@@ -198,6 +198,7 @@ function getTokenLogin() {
       idProceso: 0
     };
 
+    console.log(parms);
     const result = new Promise(function (resolve, reject) {
       axios.post(apiValidDni,parms,config)
         .then(function (res) {
