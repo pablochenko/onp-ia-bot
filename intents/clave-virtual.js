@@ -4,16 +4,20 @@ const {getValidDni,getConsultarUserExiste,getValidOlvideClave,getEnviarCorreo} =
 
 function handleIntentClaveVirtual(agent) {
     let texto = `<b>¡Solicita o recupera tu Clave Virtual!🔐</b>\nCon clave virtual puedes acceder a tus servicios de manera rápida y segura.🤝\nPor favor, selecciona tu tipo de documento:`;  
+    const inline_keyboard = [    [
+      { "text": "DNI", "callback_data": "DNI" },
+      { "text": "CE", "callback_data": "CE" },
+    ]
+  ];
     const payload = {
           "telegram": {
               "text": texto,
               "parse_mode": "HTML",
               "reply_markup": {
-                "inline_keyboard": [[{ "text": "DNI", "callback_data": "DNI" }],
-                                     [{ "text": "CE", "callback_data": "CE" }]]
-              }
+                "inline_keyboard": inline_keyboard
+              },
             }
-          }
+          };
     agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));  
     agent.context.set({ name: 'set_clave_datos', lifespan: 1, parameters: [] });
   }
@@ -34,7 +38,7 @@ function handleIntentClaveVirtualDatos(agent) {
                                     { "text": "Validar con el nombre de mi <b>Madre</b>", "callback_data": "madre" } ]]
             }
           }
-        }
+        };
   agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true})); 
   agent.context.set({ name: 'set_clave_valid', lifespan: 1, parameters: parametros });
   
