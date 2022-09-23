@@ -3,62 +3,47 @@ const { Card, Suggestion, Payload } = require('dialogflow-fulfillment');
 const {getValidDni,getConsultarUserExiste,getValidOlvideClave,getEnviarCorreo} = require('../controllers/clave-virtual');
 
 function handleIntentClaveVirtual(agent) {
-    let texto = `<b>¡Solicita o recupera tu Clave Virtual!🔐</b>\nCon clave virtual puedes acceder a tus servicios de manera rápida y segura.🤝`;  
+    let texto = `<b>¡Solicita o recupera tu Clave Virtual!🔐</b>\nCon clave virtual puedes acceder a tus servicios de manera rápida y segura.🤝\nPor favor, selecciona tu tipo de documento:`;  
     const payload = {
           "telegram": {
               "text": texto,
               "parse_mode": "HTML",
               "reply_markup": {
-                "inline_keyboard": [
-                  [{"text": "Solicitar mi Clave Virtual", "callback_data": "clave_crear"}],
-                  [{ "text": "Recuperar mi Clave Virtual", "callback_data": "recuperar_clave" }],
-                  [{ "text": "Regresar al menú principal", "callback_data": "menu" }],
-                  [{ "text": "Finalizar conversación", "callback_data": "finalizar" }]
-                ]
+                "inline_keyboard": [[{ "text": "DNI", "callback_data": "DNI" },
+                                     { "text": "CE", "callback_data": "CE" } ]]
               }
             }
           }
-    agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true})); 
- 
+    agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));  
+    agent.context.set({ name: 'set_clave_datos', lifespan: 1, parameters: parametros });
   }
 
-function  handleIntentClaveVirtualCrear(agent) {
-  agent.add("Para solicitar tu clave debes enviarme tu correo...");  
-
+function handleIntentClaveVirtualDatos(agent) {
+  const parametros = {
+    'per_num_doc': agent.parameters.per_tipo_doc,
+    'per_tipo_doc': agent.parameters.per_num_doc,
+    'per_fec_emision': agent.parameters.per_fec_emision
+  };
+  let texto = `Selecciona una opción para validar tu identidad:`;  
+  const payload = {
+        "telegram": {
+            "text": texto,
+            "parse_mode": "HTML",
+            "reply_markup": {
+              "inline_keyboard": [[{ "text": "Validar con el nombre de mi <b>Padre</b>", "callback_data": "padre" },
+                                    { "text": "Validar con el nombre de mi <b>Madre</b>", "callback_data": "madre" } ]]
+            }
+          }
+        }
+  agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true})); 
+  agent.context.set({ name: 'set_clave_valid', lifespan: 1, parameters: parametros });
+  
 }
-
-
-
-
-  function handleIntentClaveVirtualRecuperar(agent) {
-
-    const text = `<b>¡Consulta información de tu cuenta!</b>🕵️‍♂️\nEstimado/a asegurado/a para acceder a tu cuenta necesitamos validar tu identidad.\nPor favor, selecciona tu tipo de documento:`;
-  
-    const inline_keyboard = [
-      [
-        { "text": "DNI", "callback_data": "DNI" },
-        { "text": "CE", "callback_data": "CE" },
-  
-      ]
-    ];
-  
-    const payload = {
-      "telegram": {
-        "text": text,
-        "reply_markup": {
-          "inline_keyboard": inline_keyboard
-        },
-        "parse_mode": "HTML"
-      }
-    };
-    agent.add(new Payload(agent.UNSPECIFIED, payload, { rawPayload: true, sendAsMessage: true }));  
-  }
-
-  async function handleIntentClaveVirtualValidUser(agent) {
-
-    const per_tipo_doc = agent.parameters.per_tipo_doc;
-    const per_num_doc = agent.parameters.per_num_doc;
-    const per_fec_emision = agent.parameters.per_fec_emision;
+async function handleIntentClaveVirtualValidUser(agent) {
+    const datos = agent.context.get("set_clave_valid").parameters;
+    const per_tipo_doc = datos.per_tipo_doc;
+    const per_num_doc = datos.per_num_doc;
+    const per_fec_emision = datos.per_fec_emision;
     const per_tipo_padre_madre = agent.parameters.per_tipo_padre_madre;
     const per_nom_padre_madre = agent.parameters.per_nom_padre_madre;
 
@@ -87,22 +72,15 @@ function  handleIntentClaveVirtualCrear(agent) {
           mensaje = `${persona} se envió a su 📧correo electrónico "${consultarUserExiste.data.Correo}" un link para que pueda recuperar su 🔐 clave virtual`;  
 
         }else{
-          mensaje = `${persona} usted no cuenta con una clave virtual.
-solicite su 🔐 clave virtual en la opción de "Solicitar Clave Virtual"`;  
+          mensaje = `${persona} usted no cuenta con una clave virtual.\nSolicite su 🔐 clave virtual en la opción de "Solicitar Clave Virtual"`;  
         }
 
-    }else
-    {
+    }else {
       mensaje = `Estimado Usuario no pudimos validar su identidad, vuelva intentarlo nuevamente`; 
     }
 
-    
-    //validDni.data.IdProceso
 
-
-    //console.log(validDni);
-
-     texto = mensaje;  
+    texto = mensaje;  
     const payload = {
           "telegram": {
               "text": texto,
@@ -117,9 +95,8 @@ solicite su 🔐 clave virtual en la opción de "Solicitar Clave Virtual"`;
     agent.add(new Payload(agent.TELEGRAM, payload, {rawPayload: true, sendAsMessage: true}));
  
 
-  }
+}
 
+ 
 
-  
-
-  module.exports = {handleIntentClaveVirtual,handleIntentClaveVirtualCrear,handleIntentClaveVirtualRecuperar,handleIntentClaveVirtualValidUser};
+module.exports = {handleIntentClaveVirtual,handleIntentClaveVirtualDatos,handleIntentClaveVirtualValidUser};
