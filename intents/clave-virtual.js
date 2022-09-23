@@ -9,8 +9,8 @@ function handleIntentClaveVirtual(agent) {
               "text": texto,
               "parse_mode": "HTML",
               "reply_markup": {
-                "inline_keyboard": [[{ "text": "DNI", "callback_data": "DNI" },
-                                     { "text": "CE", "callback_data": "CE" } ]]
+                "inline_keyboard": [[{ "text": "DNI", "callback_data": "DNI" }],
+                                     [{ "text": "CE", "callback_data": "CE" }]]
               }
             }
           }
